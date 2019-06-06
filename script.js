@@ -234,7 +234,7 @@ function tick() {
 	}
 
 	updateRobotPos();
-	lidarDistances = updateLidar(robotPos, robotOrien);
+	lidarDistances = computeLidarDistances(robotPos, robotOrien);
 	noisifyLidar();
 
 	drawFrame();
@@ -295,7 +295,7 @@ function isColliding(pos) {
 	var j = currentMazeIdx[1];
 	return currentMaze[i][j] == true;
 }
-function updateLidar(pos, orien) {
+function computeLidarDistances(pos, orien) {
 	var lidarVals = new Array(lidarNumPoints).fill(0);
 	for(var lidarIdx=0; lidarIdx<lidarNumPoints; ++lidarIdx) {
 		var robotFrameAngle = (-lidarFOV / 2) + (lidarIdx * lidarAngle);
