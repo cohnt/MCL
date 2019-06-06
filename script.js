@@ -397,7 +397,24 @@ function calculateWeights() {
 	console.log(particles[0].weight);
 }
 function resample() {
-	//
+	var weightData = particles.map(a => a.weight);
+	var newParticles = [];
+	var cs = cumsum(weightData);
+	var step = 1/((numParticles * (1 - explorationFactor))+1);
+	var chkVal = step;
+	var chkIndex = 0;
+	for(var i=0; i<numParticles * (1 - explorationFactor); ++i) {
+		while(cs[chkIndex] < chkVal) {
+			++chkIndex;
+		}
+		chkVal += step;
+		newParticles[i] = new Particle(particles[chkIndex].pos, particles[chkIndex].heading);
+	}
+	for(var i=newParticles.length; i<numParticles; ++i) {
+		newParticles[i] = new Particle();
+		newParticles[i].randomize();
+	}
+	particles = newParticles.slice();
 }
 function translateParticles() {
 	//
