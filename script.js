@@ -210,24 +210,32 @@ function setup() {
 		console.log("Key down: " + keyId);
 		switch(keyId) {
 			case 39: //Right arrow key
-				if(currentFrame < frames.length-1) {
-					++currentFrame;
+				if(!running) {
+					if(currentFrame < frames.length-1) {
+						++currentFrame;
+					}
 				}
 				drawFrame(frames[currentFrame]);
 				break;
 			case 37: //Left arrow key
-				if(currentFrame > 0) {
-					--currentFrame;
+				if(!running) {
+					if(currentFrame > 0) {
+						--currentFrame;
+					}
 				}
 				drawFrame(frames[currentFrame]);
 				break;
 			case 48: //0 key
-				currentFrame = 0;
-				drawFrame(frames[currentFrame]);
+				if(!running) {
+					currentFrame = 0;
+					drawFrame(frames[currentFrame]);
+				}
 				break;
 			case 57: //9 key
-				currentFrame = frames.length-1;
-				drawFrame(frames[currentFrame]);
+				if(!running) {
+					currentFrame = frames.length-1;
+					drawFrame(frames[currentFrame]);
+				}
 				break;
 			case 32: //spacebar
 				if(running) {
