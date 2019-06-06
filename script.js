@@ -187,6 +187,7 @@ function setup() {
 function startButtonClick() {
 	if(!running && !hasStarted) {
 		reset();
+		generateParticles();
 		running = true;
 		hasStarted = true;
 		tick();
@@ -266,6 +267,13 @@ function reset() {
 		frameListTableHeader.parentNode.removeChild(frameListTableHeader.nextSibling);
 	}
 	drawFrame();
+}
+
+function generateParticles() {
+	for(var i=0; i<numParticles; ++i) {
+		particles[i] = new Particle();
+		particles[i].randomize();
+	}
 }
 
 function updateRobotPos() {
