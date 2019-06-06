@@ -101,13 +101,9 @@ function Particle(pos=[0,0], orien=0) {
 
 	this.randomize = function() {
 		var idx = randomIdxInMaze();
-		console.log(idx);
 		var coords = mazeIdxToCoord(idx);
-		console.log(coords);
 		var x = coords[0] + (Math.random() * mazeBoxWidth);
 		var y = coords[1] + (Math.random() * mazeBoxHeight);
-		console.log(x);
-		console.log(y);
 		this.pos = [x, y];
 		this.orien = Math.random() * 2 * Math.PI - Math.PI;
 		this.isExploration = true;
