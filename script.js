@@ -86,6 +86,7 @@ var robotPos = [0, 0];
 var robotOrien = 0;
 var lidarDistances = [];
 var particles = []; //Array of the particles used for the filter
+var predictedPose = [0, 0];
 
 ///////////////////////////////////////////
 /// CLASSES
@@ -112,13 +113,13 @@ function Particle(pos=[0,0], orien=0) {
 		this.isExploration = true;
 	}
 }
-function Frame(id, particles_in, robotPos_in, robotOrien_in, lidarDistances_in) {
+function Frame(id, particles_in, robotPos_in, robotOrien_in, lidarDistances_in, predictedPose_in) {
 	this.id = id;
 	this.particles = particles_in.slice();
 	this.robotPos = robotPos_in.slice();
 	this.robotOrien = robotOrien_in;
 	this.lidarDistances = lidarDistances_in
-	this.guessPos = [0, 0]; // TODO
+	this.prediction = predictedPose_in; // TODO
 
 	this.maxNormalizedIndex = 0;
 	this.maxNormalizedWeight = this.particles[this.maxNormalizedIndex].weight;
@@ -143,11 +144,11 @@ function Frame(id, particles_in, robotPos_in, robotOrien_in, lidarDistances_in) 
 			row.appendChild(eltCont);
 		}
 
-		var error = Math.sqrt(dist2(this.robotPos, this.guessPos));
+		var error = Math.sqrt(dist2(this.robotPos, this.prediction));
 
 		addCell(row, "Frame " + this.id);
 		addCell(row, " [ " + this.robotPos[0].toFixed(2) + ", " + this.robotPos[1].toFixed(2) + " ] ");
-		addCell(row, " [ " + this.guessPos[0].toFixed(2) + ", " + this.guessPos[1].toFixed(2) + " ] ");
+		addCell(row, " [ " + this.prediction[0].toFixed(2) + ", " + this.prediction[1].toFixed(2) + " ] ");
 		addCell(row, error.toFixed(2));
 		addCell(row, "");
 
@@ -362,7 +363,7 @@ function reset() {
 	drawRobot(robotPos, robotOrien);
 }
 function saveFrame() {
-	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances);
+	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances, predictedPose);
 	frames.push(frame);
 }
 
@@ -447,7 +448,21 @@ function particleIsValid(p) {
 	return true;
 }
 function makePrediction() {
-	//
+	var total = [0, 0];
+	var numUsed = 0;
+	for(var i=0; i<particles.length; ++i) {
+		if(!particles[i].isExploration || useExplorationParticlesGuess) {
+			total[0] += particles[i].pos[0];
+			total[1] += particles[i].pos[1];
+			++numUsed;
+		}
+	}
+	if(numUsed == 0) {
+		numUsed = 1;
+	}
+	total[0] /= numUsed;
+	total[1] /= numUsed;
+	predictedPose = total.slice();
 }
 
 function updateRobotPos() {
