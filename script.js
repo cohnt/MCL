@@ -288,7 +288,6 @@ function randomMazeClick() {
 	if(!running) {
 		generateRandomMaze();
 		reset();
-		drawFrame();
 	}
 }
 function maze1Click() {
@@ -296,7 +295,6 @@ function maze1Click() {
 		currentMaze = maze1;
 		currentMazeStart = maze1Start;
 		reset();
-		drawFrame();
 	}
 }
 function maze2Click() {
@@ -304,7 +302,6 @@ function maze2Click() {
 		currentMaze = maze2;
 		currentMazeStart = maze2Start;
 		reset();
-		drawFrame();
 	}
 }
 function maze3Click() {
@@ -312,7 +309,6 @@ function maze3Click() {
 		currentMaze = maze3;
 		currentMazeStart = maze3Start;
 		reset();
-		drawFrame();
 	}
 }
 
@@ -714,12 +710,7 @@ function generateRandomMaze() {
 			maze[i][j] = (Math.random() < randomMazeDensity);
 		}
 	}
-	var mazeStart = [0, 0];
-	do {
-		mazeStart[0] = Math.floor(Math.random() * canvasHeightBoxes)
-		mazeStart[1] = Math.floor(Math.random() * canvasWidthBoxes)
-	}
-	while(maze[mazeStart[0]][mazeStart[1]] == true);
+	var mazeStart = randomCoordsInMaze();
 	currentMaze = maze;
 	currentMazeStart = mazeStart;
 }
@@ -736,6 +727,15 @@ function coordToMazeIdx(coord) {
 	var i = (canvasHeightBoxes-1) - Math.floor(y / mazeBoxHeight);
 	var j = Math.floor(x / mazeBoxWidth);
 	return [i, j]
+}
+function randomCoordsInMaze() {
+	var coords = [0, 0];
+	do {
+		coords[0] = Math.floor(Math.random() * canvasHeightBoxes)
+		coords[1] = Math.floor(Math.random() * canvasWidthBoxes)
+	}
+	while(currentMaze[coords[0]][coords[1]] == true);
+	return coords;
 }
 
 function randomNormal(mu, sigma) {
