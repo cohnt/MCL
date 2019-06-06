@@ -16,9 +16,9 @@ var robotMarkerTriangleAngle = 30 * (Math.PI / 180); //The front angle of the tr
 var boxBorderColor = "black";
 var boxFillColor = "#333333";
 
-var randomMazeDensity = 1/3; //Fraction of blocks that are walls in a random maze
+var randomMazeDensity = 1/3; // Fraction of blocks that are walls in a random maze
 
-//https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
+// https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
 var maze1 = [ 
 	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
 	[0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
@@ -31,7 +31,13 @@ var maze1 = [
 	[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0],
 	[1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
 ]; // This grid is exactly how it will appear
-var maze1Start = [0, 0]; //The robot will start in the center of maze1[0][0]
+var maze1Start = [0, 0]; // The robot will start in the center of maze1[0][0]
+
+// TODO
+var maze2 = maze1;
+var maze2Start = maze1Start;
+var maze3 = maze1;
+var maze3Start = maze1Start;
 
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
@@ -74,6 +80,8 @@ function setup() {
 
 	document.getElementById("randomMazeButton").addEventListener("click", randomMazeClick)
 	document.getElementById("maze1Button").addEventListener("click", maze1Click)
+	document.getElementById("maze2Button").addEventListener("click", maze2Click)
+	document.getElementById("maze3Button").addEventListener("click", maze3Click)
 
 	var parElts = document.getElementsByClassName("parameterForm");
 	for(var i=0; i<parElts.length; ++i) {
@@ -126,6 +134,18 @@ function maze1Click() {
 	if(!running) {
 		currentMaze = maze1;
 		currentMazeStart = maze1Start;
+	}
+}
+function maze2Click() {
+	if(!running) {
+		currentMaze = maze2;
+		currentMazeStart = maze2Start;
+	}
+}
+function maze3Click() {
+	if(!running) {
+		currentMaze = maze3;
+		currentMazeStart = maze3Start;
 	}
 }
 
