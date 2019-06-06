@@ -47,6 +47,7 @@ var keyStates = {}; // Contains the status of every key on the keyboard
 var frames = []; // An array of each frame, with all interesting information
 var currentFrame = -1;
 var currentMaze = maze1;
+var running = false;
 
 ///////////////////////////////////////////
 /// CLASSES
@@ -70,6 +71,9 @@ function setup() {
 	currentFrameCont.guessPos = document.getElementById("currentFrameGuess");
 	currentFrameCont.error = document.getElementById("currentFrameError");
 	currentFrameCont.color = document.getElementById("currentFrameColor");
+
+	document.getElementById("randomMazeButton").addEventListener("click", randomMazeClick)
+	document.getElementById("maze1Button").addEventListener("click", maze1Click)
 
 	var parElts = document.getElementsByClassName("parameterForm");
 	for(var i=0; i<parElts.length; ++i) {
@@ -111,6 +115,18 @@ function setup() {
 	ctx = canvas.getContext("2d");
 	ctx.transform(1, 0, 0, -1, 0, 0); // Flip the context so y+ is up
 	ctx.transform(1, 0, 0, 1, 0, -canvasSize[1]); //Move 0,0 to the bottom left of the screen
+}
+
+function randomMazeClick() {
+	if(!running) {
+		generateRandomMaze();
+	}
+}
+function maze1Click() {
+	if(!running) {
+		currentMaze = maze1;
+		currentMazeStart = maze1Start;
+	}
 }
 
 
