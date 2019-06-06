@@ -50,6 +50,8 @@ var lidarFOV = 180 * (Math.PI / 180); // FOV of the lidar, in radians
 var lidarAngle = lidarFOV / (lidarNumPoints - 1); // The angle between two lidar beams
 var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar measurements
 
+var vizDrawLidar = true;
+
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
 ///////////////////////////////////////////
@@ -99,10 +101,12 @@ function setup() {
 	document.getElementById("pauseButton").addEventListener("click", pauseButtonClick);
 	document.getElementById("resetButton").addEventListener("click", resetButtonClick);
 
-	document.getElementById("randomMazeButton").addEventListener("click", randomMazeClick)
-	document.getElementById("maze1Button").addEventListener("click", maze1Click)
-	document.getElementById("maze2Button").addEventListener("click", maze2Click)
-	document.getElementById("maze3Button").addEventListener("click", maze3Click)
+	document.getElementById("randomMazeButton").addEventListener("click", randomMazeClick);
+	document.getElementById("maze1Button").addEventListener("click", maze1Click);
+	document.getElementById("maze2Button").addEventListener("click", maze2Click);
+	document.getElementById("maze3Button").addEventListener("click", maze3Click);
+
+	document.getElementById("checkboxLIDAR").addEventListener("change", function() { vizDrawLidar = this.checked; });
 
 	var parElts = document.getElementsByClassName("parameterForm");
 	for(var i=0; i<parElts.length; ++i) {
@@ -439,7 +443,9 @@ function drawFrame(frame) {
 	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
-	drawLidar(lidarDistances);
+	if(vizDrawLidar) {
+		drawLidar(lidarDistances);
+	}
 }
 function clearCanvas() {
 	//
