@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Monte Carlo Localization</title>
+	<style>
+		div {
+			display: inline-block;
+			vertical-align: top;
+		}
+		th {
+			padding: 0px 8px;
+			text-align: left;
+		}
+		td {
+			padding: 2px 8px;
+		}
+		.narrowRows tr td {
+			padding: 0px 8px;
+		}
+		#instructions {
+			padding-right: 100px;
+		}
+		.controlButton {
+			width: 100px;
+			text-align: center;
+			padding: 5px 0px;
+			border: 1px dotted #cccccc;
+			margin-bottom: 3px;
+		}
+		canvas#canvas {
+			border: 1px dotted black;
+			background-color: #eeeeee;
+		}
+		div#parameters {
+			font-size: 14px;
+		}
+	</style>
+</head>
+
+<body>
+<h2>Instructions</h2>
+<div id="instructions">
+	<p>Start, pause, and reset do exactly what you think. You can also use spacebar to pause.</p>
+	<p>Random maze generates a random maze to use. You can modify the density of walls. The preset options load handmade mazes.</p>
+	<p>Use WASD to control the robot. Collision detection with walls is *very* rudimetary.</p>
+	<p>After stopping the simulation, you can view any individual frame by clicking it in the log below</p>
+	<p>You can also use the left and right arrow keys to navigate, 0 to jump to the first frame, and 9 to jump to the last.</p>
+</div>
+<div id="controls">
+	<div class="controlButton" id="startButton" style="background-color: #bbffbb;">Start</div>
+	<div class="controlButton" id="pauseButton" style="background-color: #bbbbff;">Pause</div>
+	<div class="controlButton" id="resetButton" style="background-color: #ffbbbb;">Reset</div>
+	<br>
+	<div class="controlButton" id="randomMazeButton" style="background-color: orange;">Random Maze</div>
+	<div class="controlButton" id="maze1Button" style="background-color: #cc33ff;">Maze 1</div>
+	<div class="controlButton" id="maze2Button" style="background-color: #ff00ff;">Maze 2</div>
+	<div class="controlButton" id="maze3Button" style="background-color: #cc0099;">Maze 3</div>
+</div>
+<br><br><br>
+<div>
+	<table>
+		<tbody>
+			<tr>
+				<th>Frame #</th>
+				<th>Actual Position</th>
+				<th>Predicted Position</th>
+				<th>Error</th>
+				<th>Error Color</th>
+				<th>&nbsp;&nbsp;&nbsp;</th>
+				<th>Display Options: </th>
+				<td><input checked type="checkbox" id="checkboxMouseLocation">Mouse Location</input></td>
+				<td><input checked type="checkbox" id="checkboxGuessLocation">Guess Location</input></td>
+				<td><input checked type="checkbox" id="checkboxMousePath">Mouse Path</input></td>
+				<td><input checked type="checkbox" id="checkboxGuessPath">Guess Path</input></td>
+				<td><input checked type="checkbox" id="checkboxPathConnectors">Path Connectors</input></td>
+				<td><input checked type="checkbox" id="checkboxParticles">Particles</input></td>
+			</tr>
+			<tr>
+				<td id="currentFrameNumber"></td>
+				<td id="currentFrameActual"></td>
+				<td id="currentFrameGuess"></td>
+				<td id="currentFrameError"></td>
+				<td id="currentFrameColor"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<br>
+<div>
+	<canvas id="canvas"></canvas>
+</div>
+<div id="parameters">
+	<table>
+		<tbody class="narrowRows">
+			<tr>
+				<th>Parameter Name</th>
+				<th>Value</th>
+				<th>Description</th>
+			</tr>
+			<!-- <tr>
+				<td>Parameter</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					//
+				})(this)"></textarea></td>
+				<td>Description</td>
+			</tr> -->
+		</tbody>
+	</table>
+</div>
+<br>
+<table id="frameListCont">
+	<tbody>
+		<!-- List of each frame, with information about that frame -->
+		<!-- Most recent at the top -->
+		<!-- Click a frame to view it after simulation is finished -->
+		<tr id="frameListTableHeader">
+			<th>Frame #</th>
+			<th>Actual Position</th>
+			<th>Predicted Position</th>
+			<th>Error</th>
+			<th>Error Color</th>
+		</tr>
+	</tbody>
+</table>
+
+<script src="./script.js" type="text/javascript"></script>
+
+<noscript>Please enable JavaScript!</noscript>
+
+</body>
+</html>
