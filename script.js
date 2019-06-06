@@ -44,7 +44,7 @@ var tickTime = 1000 / tickRate; // ms per tick
 
 var robotSpeed = 60; // Robot speed, in pixels per second
 var robotTurnRate = 90 * (Math.PI / 180); // Robot turn rate, in radians per second
-var lidarNumPoints = 9; // Number of points given in each sweep of the lidar
+var lidarNumPoints = 15; // Number of points given in each sweep of the lidar
 var lidarFOV = 180 * (Math.PI / 180); // FOV of the lidar, in radians
 var lidarAngle = lidarFOV / (lidarNumPoints - 1); // The angle between two lidar beams
 var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar measurements
@@ -56,7 +56,7 @@ var vizParticleLIDAR = false;
 var numParticles = 500;
 var particlePosNoiseVariance = 5;
 var particleOrientationNoiseVariance = 15 * (Math.PI / 180);
-var explorationFactor = 0.01; //0.0 means no particles are randomly placed for exploration, 0.5 means 50%, 1.0 means 100%
+var explorationFactor = 0.05; //0.0 means no particles are randomly placed for exploration, 0.5 means 50%, 1.0 means 100%
 var useExplorationParticlesGuess = false; //Whether or not to use exploration particles when estimating mouse location.
 
 var particleDispRadius = 2;
