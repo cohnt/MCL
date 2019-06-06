@@ -51,6 +51,7 @@ var lidarAngle = lidarFOV / (lidarNumPoints - 1); // The angle between two lidar
 var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar measurements
 
 var vizDrawLidar = true;
+var vizDrawParticles = true;
 
 var numParticles = 500;
 var particlePosNoiseVariance = 5;
@@ -103,6 +104,70 @@ function Particle(pos=[0,0], orien=0) {
 		this.isExploration = true;
 	}
 }
+function Frame(id, particles_in, robotPos_in, robotOrien_in, lidarDistances_in) {
+	this.id = id;
+	this.particles = particles_in.slice();
+	this.robotPos = robotPos_in.slice();
+	this.robotOrien = robotOrien_in;
+	this.lidarDistances = lidarDistances_in
+	this.guessPos = [0, 0]; // TODO
+
+	this.maxNormalizedIndex = 0;
+	this.maxNormalizedWeight = this.particles[this.maxNormalizedIndex].weight;
+	for(var i=1; i<this.particles.length; ++i) {
+		if(particles[i].weight > this.maxNormalizedWeight) {
+			this.maxNormalizedIndex = i;
+			this.maxNormalizedWeight = this.particles[this.maxNormalizedIndex].weight;
+		}
+	}
+	var maxError = Math.pow(Math.E, -1*dist2(this.robotPos, this.particles[this.maxNormalizedIndex].pos))
+		+ Math.pow(Math.E, -1*angleDist(this.mouseOrien, this.particles[this.maxNormalizedIndex].heading));
+	this.frameColorMultiplier = maxError * weightColorMultiplier;
+
+	this.log = function() {
+		var row = document.createElement("tr");
+
+		function addCell(row, contents) {
+			var eltCont = document.createElement("td");
+			var eltText = document.createTextNode(contents);
+			eltCont.appendChild(eltText);
+			eltCont.style.padding = "2px 8px";
+			row.appendChild(eltCont);
+		}
+
+		var error = Math.sqrt(dist2(this.robotPos, this.guessPos));
+
+		addCell(row, "Frame " + this.id);
+		addCell(row, " [ " + this.robotPos[0].toFixed(2) + ", " + this.robotPos[1].toFixed(2) + " ] ");
+		addCell(row, " [ " + this.guessPos[0].toFixed(2) + ", " + this.guessPos[1].toFixed(2) + " ] ");
+		addCell(row, error.toFixed(2));
+		addCell(row, "");
+
+		row.setAttribute("id", "frame" + this.id);
+		row.lastChild.style.backgroundColor = errorColor(error);
+		row.addEventListener("click", function() {
+			if(running) {
+				return;
+			}
+			currentFrame = this.id.slice(5);
+			drawFrame(frames[currentFrame], true);
+
+			currentFrameCont.error.scrollIntoView();
+			window.scrollBy(0, -25);
+		});
+
+		frameListTableHeader.parentNode.insertBefore(row, frameListTableHeader.nextSibling);
+	}
+
+	this.showCurrent = function() {
+		currentFrameCont.number.innerHTML = this.id;
+		currentFrameCont.actualPos.innerHTML = " [ " + this.robotPos[0].toFixed(2) + ", " + this.robotPos[1].toFixed(2) + " ] ";
+		currentFrameCont.guessPos.innerHTML = " [ " + this.guessPos[0].toFixed(2) + ", " + this.guessPos[1].toFixed(2) + " ] ";
+		var error = Math.sqrt(dist2(this.robotPos, this.guessPos));
+		currentFrameCont.error.innerHTML = error.toFixed(2);
+		currentFrameCont.color.style.backgroundColor = errorColor(error);
+	}
+}
 
 ///////////////////////////////////////////
 /// FUNCTIONS
@@ -132,6 +197,7 @@ function setup() {
 	document.getElementById("maze3Button").addEventListener("click", maze3Click);
 
 	document.getElementById("checkboxLIDAR").addEventListener("change", function() { vizDrawLidar = this.checked; });
+	document.getElementById("checkboxParticles").addEventListener("change", function() { vizDrawParticles = this.checked; });
 
 	var parElts = document.getElementsByClassName("parameterForm");
 	for(var i=0; i<parElts.length; ++i) {
@@ -251,7 +317,10 @@ function tick() {
 	lidarDistances = computeLidarDistances(robotPos, robotOrien);
 	noisifyLidar();
 
-	drawFrame();
+	saveFrame();
+	frames[frames.length-1].log();
+
+	drawFrame(frames[frames.length-1]);
 
 	window.setTimeout(tick, tickTime);
 }
@@ -266,7 +335,12 @@ function reset() {
 		//Delete all children of frameListCont.
 		frameListTableHeader.parentNode.removeChild(frameListTableHeader.nextSibling);
 	}
-	drawFrame();
+	drawMaze(currentMaze);
+	drawRobot(robotPos, robotOrien);
+}
+function saveFrame() {
+	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances);
+	frames.push(frame);
 }
 
 function generateParticles() {
@@ -479,9 +553,15 @@ function isZero(val) {
 function drawFrame(frame) {
 	clearCanvas();
 	drawMaze(currentMaze);
-	drawRobot(robotPos, robotOrien);
+	drawRobot(frame.robotPos, frame.robotOrien);
 	if(vizDrawLidar) {
-		drawLidar(robotPos, robotOrien, lidarDistances);
+		console.log(frame.lidarDistances);
+		drawLidar(frame.robotPos, frame.robotOrien, frame.lidarDistances);
+	}
+	if(vizDrawParticles) {
+		for(var i=0; i<frame.particles.length; ++i) {
+			drawParticle(frame.particles[i], frame.maxNormalizedWeight, frame.frameColorMultiplier);
+		}
 	}
 }
 function clearCanvas() {
@@ -558,6 +638,21 @@ function drawLidar(pos, orien, distances) {
 		ctx.stroke();
 	}
 }
+function drawParticle(p, maxWeight, mult) {
+	color = weightToColor(p.weight * mult / maxWeight);
+	ctx.strokeStyle = color;
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.moveTo(p.pos[0], p.pos[1]);
+	ctx.arc(p.pos[0], p.pos[1], particleDispRadius, 0, 2*Math.PI, true);
+	ctx.closePath();
+	ctx.fill();
+	ctx.beginPath();
+	ctx.moveTo(p.pos[0], p.pos[1]);
+	ctx.lineTo(p.pos[0] + (particleDispHeadingLength*Math.cos(p.heading)),
+		p.pos[1] + (particleDispHeadingLength*Math.sin(p.heading)));
+	ctx.stroke();
+}
 
 function generateRandomMaze() {
 	var maze = []
@@ -596,6 +691,69 @@ function randomNormal(mean, variance) {
 	var u2 = Math.random();
 	var z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
 	return mean + (z0 * variance);
+}
+function weightToColor(weight) {
+	if(weight > 1) {
+		weight = 1;
+	}
+
+	//Create HSL
+	var h = ((1-weight)*240)/360;
+	var s = 1;
+	var l = 0.5;
+
+	//Convert to RGB (from https://gist.github.com/mjackson/5311256)
+	var r, g, b;
+
+	function hue2rgb(p, q, t) {
+		if (t < 0) t += 1;
+		if (t > 1) t -= 1;
+		if (t < 1/6) return p + (q - p) * 6 * t;
+		if (t < 1/2) return q;
+		if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+		return p;
+	}
+
+	var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+	var p = 2 * l - q;
+
+	r = hue2rgb(p, q, h + 1/3);
+	g = hue2rgb(p, q, h);
+	b = hue2rgb(p, q, h - 1/3);
+
+	r = Math.floor(r * 255);
+	g = Math.floor(g * 255);
+	b = Math.floor(b * 255);
+
+	//Convert to RGB color code
+	function componentToHex(c) {
+		var hex = c.toString(16);
+		return hex.length == 1 ? "0" + hex : hex;
+	}
+	function rgbToHex(r, g, b) {
+		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	}
+
+	return rgbToHex(r, g, b);
+}
+function errorColor(error) {
+	var errorWeight = error / errorWeightColorDivisor;
+	if(errorWeight < 0) { errorWeight = 0; }
+	if(errorWeight > 1) { errorWeight = 1; }
+	errorWeight = 1 - errorWeight;
+	return weightToColor(errorWeight);
+}
+function dist2(a, b) {
+	var dx = b[0]-a[0];
+	var dy = b[1]-a[1];
+	return (dx*dx) + (dy*dy);
+}
+function angleDist(a, b) {
+	var diff = a - b;
+	function specialMod(lhs, rhs) {
+		return lhs - (Math.floor(lhs/rhs) * rhs);
+	}
+	return (specialMod(diff + Math.PI, Math.PI*2)) - Math.PI;
 }
 
 ///////////////////////////////////////////
