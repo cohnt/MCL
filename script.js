@@ -234,7 +234,7 @@ function tick() {
 	}
 
 	updateRobotPos();
-	updateLidar();
+	lidarDistances = updateLidar(robotPos, robotOrien);
 	noisifyLidar();
 
 	drawFrame();
@@ -295,15 +295,16 @@ function isColliding(pos) {
 	var j = currentMazeIdx[1];
 	return currentMaze[i][j] == true;
 }
-function updateLidar() {
+function updateLidar(pos, orien) {
+	var lidarVals = new Array(lidarNumPoints).fill(0);
 	for(var lidarIdx=0; lidarIdx<lidarNumPoints; ++lidarIdx) {
 		var robotFrameAngle = (-lidarFOV / 2) + (lidarIdx * lidarAngle);
-		var x0 = robotPos[0];
-		var y0 = robotPos[1];
-		var globalFrameAngle = robotFrameAngle + robotOrien;
+		var x0 = pos[0];
+		var y0 = pos[1];
+		var globalFrameAngle = robotFrameAngle + orien;
 		var dx = Math.cos(globalFrameAngle);
 		var dy = Math.sin(globalFrameAngle);
-		var mazeIdx = coordToMazeIdx(robotPos);
+		var mazeIdx = coordToMazeIdx(pos);
 		var xSign = dx > 0 ? 1 : -1;
 		var ySign = dy > 0 ? 1 : -1;
 		if(isZero(dx)) {
@@ -313,21 +314,21 @@ function updateLidar() {
 				if(currentMaze[i][j] == true) {
 					var y1 = mazeIdxToCoord([i, j])[1];
 					if(ySign == 1) {
-						lidarDistances[lidarIdx] = y1 - y0;
+						lidarVals[lidarIdx] = y1 - y0;
 					}
 					else {
-						lidarDistances[lidarIdx] = y0 - (y1 + mazeBoxHeight);
+						lidarVals[lidarIdx] = y0 - (y1 + mazeBoxHeight);
 					}
 					break;
 				}
 			}
 			if(i == -1) {
 				var y1 = canvasSize[1]
-				lidarDistances[lidarIdx] = y1 - y0;
+				lidarVals[lidarIdx] = y1 - y0;
 			}
 			else if(i == canvasHeightBoxes) {
 				var y1 = 0;
-				lidarDistances[lidarIdx] = y0 - y1;
+				lidarVals[lidarIdx] = y0 - y1;
 			}
 		}
 		else if(isZero(dy)) {
@@ -337,21 +338,21 @@ function updateLidar() {
 				if(currentMaze[i][j] == true) {
 					var x1 = mazeIdxToCoord([i, j])[0];
 					if(xSign == 1) {
-						lidarDistances[lidarIdx] = x1 - x0;
+						lidarVals[lidarIdx] = x1 - x0;
 					}
 					else {
-						lidarDistances[lidarIdx] = x0 - (x1 + mazeBoxWidth);
+						lidarVals[lidarIdx] = x0 - (x1 + mazeBoxWidth);
 					}
 					break;
 				}
 			}
 			if(j == -1) {
 				var x1 = 0;
-				lidarDistances[lidarIdx] = x0 - x1;
+				lidarVals[lidarIdx] = x0 - x1;
 			}
 			else if(j == canvasWidthBoxes) {
 				var x1 = canvasSize[0]
-				lidarDistances[lidarIdx] = x1 - x0;
+				lidarVals[lidarIdx] = x1 - x0;
 			}
 		}
 		else {
@@ -430,13 +431,14 @@ function updateLidar() {
 			}
 
 			if(nsDist < ewDist) {
-				lidarDistances[lidarIdx] = nsDist;
+				lidarVals[lidarIdx] = nsDist;
 			}
 			else {
-				lidarDistances[lidarIdx] = ewDist;
+				lidarVals[lidarIdx] = ewDist;
 			}
 		}
 	}
+	return lidarVals;
 }
 function noisifyLidar() {
 	for(var i=0; i<lidarNumPoints; ++i) {
@@ -456,7 +458,7 @@ function drawFrame(frame) {
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
 	if(vizDrawLidar) {
-		drawLidar(lidarDistances);
+		drawLidar(robotPos, robotOrien, lidarDistances);
 	}
 }
 function clearCanvas() {
@@ -518,7 +520,7 @@ function drawMaze(maze) {
 		}
 	}
 }
-function drawLidar(distances) {
+function drawLidar(pos, orien, distances) {
 	// Note: distances.length == lidarNumPoints
 	for(var i=0; i<lidarNumPoints; ++i) {
 		var robotFrameAngle = (-lidarFOV / 2) + (i * lidarAngle);
