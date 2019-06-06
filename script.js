@@ -323,7 +323,7 @@ function tick() {
 
 	updateRobotPos();
 	lidarDistances = computeLidarDistances(robotPos, robotOrien);
-	noisifyLidar();
+	lidarDistances = noisifyLidar(lidarDistances);
 
 	saveFrame();
 	frames[frames.length-1].log();
@@ -549,10 +549,12 @@ function computeLidarDistances(pos, orien) {
 	}
 	return lidarVals;
 }
-function noisifyLidar() {
+function noisifyLidar(distances_in) {
+	distances_out = distances_in.slice();
 	for(var i=0; i<lidarNumPoints; ++i) {
-		lidarDistances[i] += randomNormal(0, lidarNoiseVariance);
+		distances_out[i] += randomNormal(0, lidarNoiseVariance);
 	}
+	return distances_out
 }
 function isZero(val) {
 	//
