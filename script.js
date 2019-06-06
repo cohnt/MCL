@@ -12,6 +12,7 @@ var canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight
 var robotColor = "black";
 var robotSize = 15; //Radius of the robot (in pixels)
 var robotMarkerTriangleAngle = 30 * (Math.PI / 180); //The front angle of the triangular robot marker
+var lidarBeamColor = "red";
 
 var boxBorderColor = "black";
 var boxFillColor = "#333333";
@@ -43,6 +44,9 @@ var tickTime = 1000 / tickRate; // ms per tick
 
 var robotSpeed = 60; // Robot speed, in pixels per second
 var robotTurnRate = 90 * (Math.PI / 180); // Robot turn rate, in radians per second
+var lidarNumPoints = 5; // Number of points given in each sweep of the lidar
+var lidarFOV = 180 * (Math.PI / 180); // FOV of the lidar, in radians
+var lidarAngle = lidarFOV / (lidarNumPoints - 1); // The angle between two lidar beams
 
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
@@ -314,6 +318,23 @@ function drawMaze(maze) {
 			var y = (maze.length-1) - i
 			drawBox([x, y], maze[i][j])
 		}
+	}
+}
+function drawLidar(distances) {
+	// Note: distances.length == lidarNumPoints
+	for(var i=0; i<lidarNumPoints; ++i) {
+		var robotFrameAngle = (-lidarFOV / 2) + (i * lidarAngle);
+		var x0 = robotPos[0];
+		var x1 = robotPos[1];
+		var globalFrameAngle = robotFrameAngle + robotOrien;
+		var dx = distances[i] * Math.cos(globalFrameAngle);
+		var dy = distances[i] * Math.sin(globalFrameAngle);
+
+		ctx.strokeStyle = lidarBeamColor;
+		ctx.beginPath();
+		ctx.moveTo(robotPos[0], robotPos[1]);
+		ctx.lineTo(robotPos[0] + dx, robotPos[1] + dy);
+		ctx.stroke();
 	}
 }
 
