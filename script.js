@@ -692,7 +692,7 @@ function drawFrame(frame) {
 	}
 	if(vizDrawParticles) {
 		for(var i=0; i<frame.particles.length; ++i) {
-			drawParticle(frame.particles[i], frame.maxNormalizedWeight, frame.frameColorMultiplier);
+			drawParticle(frame.particles[i], frame.maxNormalizedWeight);
 		}
 	}
 	if(vizParticleLIDAR) {
@@ -776,7 +776,7 @@ function drawLidar(pos, orien, distances) {
 	}
 }
 function drawParticle(p, maxWeight, mult) {
-	color = weightToColor(p.weight * mult / maxWeight);
+	color = weightToColor(p.weight / maxWeight);
 	ctx.strokeStyle = color;
 	ctx.fillStyle = color;
 	ctx.beginPath();
