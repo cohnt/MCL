@@ -327,7 +327,7 @@ function tick() {
 
 	measureParticles();
 	calculateWeights();
-	makePathGuess();
+	makePrediction();
 
 	saveFrame();
 	frames[frames.length-1].log();
@@ -377,6 +377,9 @@ function resample() {
 function translateParticles() {
 	//
 }
+function makePrediction() {
+	//
+}
 
 function updateRobotPos() {
 	var upKey = 87; //W
@@ -418,6 +421,9 @@ function updateRobotPos() {
 	}
 }
 function isColliding(pos) {
+	if(pos[0] < 0 || pos[0] >= canvasSize[0] || pos[1] < 0 || pos[1] >= canvasSize[1]) {
+		return true;
+	}
 	var currentMazeIdx = coordToMazeIdx(pos);
 	var i = currentMazeIdx[0];
 	var j = currentMazeIdx[1];
