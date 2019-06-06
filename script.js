@@ -48,6 +48,7 @@ var robotTurnRate = 90 * (Math.PI / 180); // Robot turn rate, in radians per sec
 var lidarNumPoints = 25; // Number of points given in each sweep of the lidar
 var lidarFOV = 180 * (Math.PI / 180); // FOV of the lidar, in radians
 var lidarAngle = lidarFOV / (lidarNumPoints - 1); // The angle between two lidar beams
+var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar measurements
 
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
@@ -203,6 +204,7 @@ function tick() {
 
 	updateRobotPos();
 	updateLidar();
+	noisifyLidar();
 
 	drawFrame();
 
@@ -403,6 +405,14 @@ function updateLidar() {
 				lidarDistances[lidarIdx] = ewDist;
 			}
 		}
+	}
+}
+function noisifyLidar() {
+	for(var i=0; i<lidarNumPoints; ++i) {
+		var u1 = Math.random();
+		var u2 = Math.random();
+		var z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+		lidarDistances[i] += (z0 * lidarNoiseVariance);
 	}
 }
 function isZero(val) {
