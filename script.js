@@ -103,6 +103,18 @@ function drawFrame(frame) {
 function clearCanvas() {
 	ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
 }
+function drawBox(gridPos, filled) {
+	var x0 = gridPos[0] * mazeBoxWidth;
+	var y0 = gridPos[1] * mazeBoxHeight;
+	var dx = mazeBoxWidth;
+	var dy = mazeBoxHeight;
+	ctx.beginPath();
+	ctx.rect(x0, y0, dx, dy);
+	ctx.stroke();
+	if(filled) {
+		ctx.fillRect(x0, y0, dx, dy);
+	}
+}
 function drawRobot(pos, orien) {
 	// orien should be in radians
 	ctx.strokeStyle = robotColor;
