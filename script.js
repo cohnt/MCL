@@ -52,6 +52,7 @@ var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar meas
 
 var vizDrawLidar = true;
 var vizDrawParticles = true;
+var vizParticleLIDAR = false;
 
 var numParticles = 500;
 var particlePosNoiseVariance = 5;
@@ -198,6 +199,7 @@ function setup() {
 
 	document.getElementById("checkboxLIDAR").addEventListener("change", function() { vizDrawLidar = this.checked; });
 	document.getElementById("checkboxParticles").addEventListener("change", function() { vizDrawParticles = this.checked; });
+	document.getElementById("checkboxParticleLIDAR").addEventListener("change", function() { vizParticleLIDAR = this.checked; });
 
 	var parElts = document.getElementsByClassName("parameterForm");
 	for(var i=0; i<parElts.length; ++i) {
@@ -606,6 +608,11 @@ function drawFrame(frame) {
 	if(vizDrawParticles) {
 		for(var i=0; i<frame.particles.length; ++i) {
 			drawParticle(frame.particles[i], frame.maxNormalizedWeight, frame.frameColorMultiplier);
+		}
+	}
+	if(vizParticleLIDAR) {
+		for(var i=0; i<frame.particles.length; ++i) {
+			drawLidar(frame.particles[i].pos, frame.particles[i].orien, frame.particles[i].lidarReadings);
 		}
 	}
 }
