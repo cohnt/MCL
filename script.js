@@ -55,25 +55,27 @@ function setup() {
 		var keyId = e.which;
 		keyStates[keyId] = true;
 		console.log("Key down: " + keyId);
-		if(keyId == 39) { //Right arrow key
-			if(currentFrame < frames.length-1) {
-				++currentFrame;
-			}
-			drawFrame(frames[currentFrame]);
-		}
-		else if(keyId == 37) { //Left arrow key
-			if(currentFrame > 0) {
-				--currentFrame;
-			}
-			drawFrame(frames[currentFrame]);
-		}
-		else if(keyId == 48) { //0 key
-			currentFrame = 0;
-			drawFrame(frames[currentFrame]);
-		}
-		else if(keyId == 57) { //9 key
-			currentFrame = frames.length-1;
-			drawFrame(frames[currentFrame]);
+		switch(keyId) {
+			case 39: //Right arrow key
+				if(currentFrame < frames.length-1) {
+					++currentFrame;
+				}
+				drawFrame(frames[currentFrame]);
+				break;
+			case 37: //Left arrow key
+				if(currentFrame > 0) {
+					--currentFrame;
+				}
+				drawFrame(frames[currentFrame]);
+				break;
+			case keyId == 48: //0 key
+				currentFrame = 0;
+				drawFrame(frames[currentFrame]);
+				break;
+			case keyId == 57: //9 key
+				currentFrame = frames.length-1;
+				drawFrame(frames[currentFrame]);
+				break;
 		}
 	});
 	document.addEventListener("keyup", function(e) {
