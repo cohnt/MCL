@@ -16,6 +16,20 @@ var robotMarkerTriangleAngle = 30 * (Math.PI / 180); //The front angle of the tr
 var boxBorderColor = "black";
 var boxFillColor = "#333333";
 
+//https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
+var maze1 = [ 
+	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+	[0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+	[0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+	[0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+	[0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+	[1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1],
+	[0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+	[0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0],
+	[1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+];
+
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
 ///////////////////////////////////////////
@@ -146,6 +160,15 @@ function drawRobot(pos, orien) {
 	ctx.lineTo(backRight[0], backRight[1]);
 	ctx.lineTo(front[0], front[1]);
 	ctx.stroke();
+}
+function drawMaze(maze) {
+	for(var i=0; i<maze.length; ++i) {
+		for(var j=0; j<maze[i].length; ++j) {
+			x = j;
+			y = (maze.length-1) - i
+			drawBox([x, y], maze[i][j])
+		}
+	}
 }
 
 ///////////////////////////////////////////
