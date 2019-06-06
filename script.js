@@ -53,7 +53,10 @@ var keyStates = {}; // Contains the status of every key on the keyboard
 var frames = []; // An array of each frame, with all interesting information
 var currentFrame = -1;
 var currentMaze = maze1;
+var currentMazeStart = maze1Start;
 var running = false;
+var robotPos = [0, 0];
+var robotOrien = 0;
 
 ///////////////////////////////////////////
 /// CLASSES
@@ -151,7 +154,9 @@ function maze3Click() {
 
 
 function drawFrame(frame) {
-	//Nothing for now
+	clearCanvas();
+	drawMaze(currentMaze);
+	drawRobot(robotPos, robotOrien);
 }
 
 function clearCanvas() {
@@ -227,6 +232,13 @@ function generateRandomMaze() {
 	while(maze[mazeStart[0]][mazeStart[1]] == true);
 	currentMaze = maze;
 	currentMazeStart = mazeStart;
+}
+function mazeIdxToCoord(idx) {
+	var i = idx[0];
+	var j = idx[1];
+	var x = (j + 0.5) * mazeBoxWidth;
+	var y = ((canvasHeightBoxes-1) - i + 0.5) * mazeBoxHeight;
+	return [x, y];
 }
 
 ///////////////////////////////////////////
