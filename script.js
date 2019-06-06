@@ -357,6 +357,7 @@ function reset() {
 	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
+	hasStarted = false;
 }
 function saveFrame() {
 	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances, predictedPose);
