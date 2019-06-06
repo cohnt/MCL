@@ -20,7 +20,8 @@ var boxFillColor = "#333333";
 var randomMazeDensity = 1/3; // Fraction of blocks that are walls in a random maze
 // https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
 var maze1 = [ 
-	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+	// [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
 	[0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
 	[0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
@@ -68,6 +69,7 @@ var running = false;
 var stop = false;
 var robotPos = [0, 0];
 var robotOrien = 0;
+var lidarDistances = [];
 
 ///////////////////////////////////////////
 /// CLASSES
@@ -200,6 +202,7 @@ function tick() {
 	}
 
 	updateRobotPos();
+	updateLidar();
 
 	drawFrame();
 
@@ -207,7 +210,10 @@ function tick() {
 }
 function reset() {
 	robotPos = mazeIdxToCoord(currentMazeStart);
+	robotPos[0] += 0.5 * mazeBoxWidth;
+	robotPos[1] += 0.5 * mazeBoxHeight;
 	robotOrien = 0;
+	lidarDistances = new Array(lidarNumPoints).fill(0);
 	drawFrame();
 }
 
@@ -252,16 +258,163 @@ function updateRobotPos() {
 }
 function isColliding(pos) {
 	var currentMazeIdx = coordToMazeIdx(pos);
-	console.log(currentMazeIdx);
 	var i = currentMazeIdx[0];
 	var j = currentMazeIdx[1];
 	return currentMaze[i][j] == true;
+}
+function updateLidar() {
+	for(var lidarIdx=0; lidarIdx<lidarNumPoints; ++lidarIdx) {
+		var robotFrameAngle = (-lidarFOV / 2) + (lidarIdx * lidarAngle);
+		var x0 = robotPos[0];
+		var y0 = robotPos[1];
+		var globalFrameAngle = robotFrameAngle + robotOrien;
+		var dx = Math.cos(globalFrameAngle);
+		var dy = Math.sin(globalFrameAngle);
+		var mazeIdx = coordToMazeIdx(robotPos);
+		var xSign = dx > 0 ? 1 : -1;
+		var ySign = dy > 0 ? 1 : -1;
+		if(isZero(dx)) {
+			var i = mazeIdx[0];
+			var j = mazeIdx[1];
+			for(; i>=0 && i<canvasHeightBoxes; i+=(-ySign)) {
+				if(currentMaze[i][j] == true) {
+					var y1 = mazeIdxToCoord([i, j])[1];
+					if(ySign == 1) {
+						lidarDistances[lidarIdx] = y1 - y0;
+					}
+					else {
+						lidarDistances[lidarIdx] = y0 - (y1 + mazeBoxHeight);
+					}
+					break;
+				}
+			}
+			if(i == -1) {
+				var y1 = canvasSize[1]
+				lidarDistances[lidarIdx] = y1 - y0;
+			}
+			else if(i == canvasHeightBoxes) {
+				var y1 = 0;
+				lidarDistances[lidarIdx] = y0 - y1;
+			}
+		}
+		else if(isZero(dy)) {
+			var i = mazeIdx[0];
+			var j = mazeIdx[1];
+			for(; j>=0 && j<canvasWidthBoxes; j+=xSign) {
+				if(currentMaze[i][j] == true) {
+					var x1 = mazeIdxToCoord([i, j])[0];
+					if(xSign == 1) {
+						lidarDistances[lidarIdx] = x1 - x0;
+					}
+					else {
+						lidarDistances[lidarIdx] = x0 - (x1 + mazeBoxWidth);
+					}
+					break;
+				}
+			}
+			if(j == -1) {
+				var x1 = 0;
+				lidarDistances[lidarIdx] = x0 - x1;
+			}
+			else if(j == canvasWidthBoxes) {
+				var x1 = canvasSize[0]
+				lidarDistances[lidarIdx] = x1 - x0;
+			}
+		}
+		else {
+			// First, get the shortest distance hitting a north-south wall
+			var nsDist = Infinity;
+			var i = mazeIdx[0];
+			var j = mazeIdx[1] + xSign;
+			for(; j>=0 && j<canvasWidthBoxes; j+=xSign) {
+				var xComputed = mazeIdxToCoord([0, j])[0];
+				if(xSign == -1) {
+					xComputed += mazeBoxWidth;
+				}
+				var yComputed = y0 + ((xComputed - x0) * (dy/dx));
+				if(yComputed < 0 || yComputed >= canvasSize[1]) {
+					nsDist = Infinity;
+					break;
+				}
+				i = coordToMazeIdx([xComputed, yComputed])[0];
+				if(currentMaze[i][j] == true) {
+					var horiz = xComputed - x0;
+					var vert = yComputed - y0;
+					nsDist = Math.sqrt((horiz)*(horiz) + (vert)*(vert));
+					break;
+				}
+			}
+			if(j == -1) {
+				var xComputed = 0;
+				var yComputed = y0 + ((xComputed - x0) * (dy/dx));
+				var horiz = xComputed - x0;
+				var vert = yComputed - y0;
+				nsDist = Math.sqrt((horiz)*(horiz) + (vert)*(vert));
+			}
+			else if(j == canvasWidthBoxes) {
+				var xComputed = canvasSize[0];
+				var yComputed = y0 + ((xComputed - x0) * (dy/dx));
+				var horiz = xComputed - x0;
+				var vert = yComputed - y0;
+				nsDist = Math.sqrt((horiz)*(horiz) + (vert)*(vert));
+			}
+
+			// Now, get the shortest distance hitting an east-west wall
+			var ewDist = Infinity;
+			var i = mazeIdx[0] + (-ySign);
+			var j = mazeIdx[1];
+			for(; i>=0 && i<canvasHeightBoxes; i+=(-ySign)) {
+				var yComputed = mazeIdxToCoord([i, 0])[1];
+				if(ySign == -1) {
+					yComputed += mazeBoxHeight;
+				}
+				var xComputed = x0 + ((yComputed - y0) * (dx/dy));
+				if(xComputed < 0 || xComputed >= canvasSize[0]) {
+					ewDist = Infinity;
+					break;
+				}
+				j = coordToMazeIdx([xComputed, yComputed])[1];
+				if(currentMaze[i][j] == true) {
+					var horiz = xComputed - x0;
+					var vert = yComputed - y0;
+					ewDist = Math.sqrt((horiz)*(horiz) + (vert)*(vert));
+					break;
+				}
+			}
+			if(i == -1) {
+				var yComputed = canvasSize[1];
+				var xComputed = x0 + ((yComputed - y0) * (dx/dy));
+				var horiz = xComputed - x0;
+				var vert = yComputed - y0;
+				ewDist = Math.sqrt((horiz)*(horiz) + (vert)*(vert));
+			}
+			else if(i == canvasHeightBoxes) {
+				var yComputed = 0;
+				var xComputed = x0 + ((yComputed - y0) * (dx/dy));
+				var horiz = xComputed - x0;
+				var vert = yComputed - y0;
+				ewDist = Math.sqrt((horiz)*(horiz) + (vert)*(vert));
+			}
+
+			if(nsDist < ewDist) {
+				lidarDistances[lidarIdx] = nsDist;
+			}
+			else {
+				lidarDistances[lidarIdx] = ewDist;
+			}
+		}
+	}
+}
+function isZero(val) {
+	//
+	return Math.abs(val) < 0.0000001
 }
 
 function drawFrame(frame) {
 	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
+	drawLidar(lidarDistances);
 }
 function clearCanvas() {
 	//
@@ -326,8 +479,6 @@ function drawLidar(distances) {
 	// Note: distances.length == lidarNumPoints
 	for(var i=0; i<lidarNumPoints; ++i) {
 		var robotFrameAngle = (-lidarFOV / 2) + (i * lidarAngle);
-		var x0 = robotPos[0];
-		var x1 = robotPos[1];
 		var globalFrameAngle = robotFrameAngle + robotOrien;
 		var dx = distances[i] * Math.cos(globalFrameAngle);
 		var dy = distances[i] * Math.sin(globalFrameAngle);
@@ -360,8 +511,8 @@ function generateRandomMaze() {
 function mazeIdxToCoord(idx) {
 	var i = idx[0];
 	var j = idx[1];
-	var x = (j + 0.5) * mazeBoxWidth;
-	var y = ((canvasHeightBoxes-1) - i + 0.5) * mazeBoxHeight;
+	var x = j * mazeBoxWidth;
+	var y = ((canvasHeightBoxes-1) - i) * mazeBoxHeight;
 	return [x, y];
 }
 function coordToMazeIdx(coord) {
