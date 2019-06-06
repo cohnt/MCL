@@ -59,8 +59,8 @@ var particleOrientationNoiseVariance = 15 * (Math.PI / 180);
 var explorationFactor = 0.01; //0.0 means no particles are randomly placed for exploration, 0.5 means 50%, 1.0 means 100%
 var useExplorationParticlesGuess = false; //Whether or not to use exploration particles when estimating mouse location.
 
-var particleDispRadius = 2;
-var particleDispHeadingLength = 5; //Length of the direction marker for each particle
+var particleDispRadius = 3;
+var particleDispHeadingLength = 8; //Length of the direction marker for each particle
 var errorWeightColorDivisor = 300;
 var weightColorMultiplier = 0.9;
 
@@ -649,8 +649,8 @@ function drawParticle(p, maxWeight, mult) {
 	ctx.fill();
 	ctx.beginPath();
 	ctx.moveTo(p.pos[0], p.pos[1]);
-	ctx.lineTo(p.pos[0] + (particleDispHeadingLength*Math.cos(p.heading)),
-		p.pos[1] + (particleDispHeadingLength*Math.sin(p.heading)));
+	ctx.lineTo(p.pos[0] + (particleDispHeadingLength*Math.cos(p.orien)),
+		p.pos[1] + (particleDispHeadingLength*Math.sin(p.orien)));
 	ctx.stroke();
 }
 
