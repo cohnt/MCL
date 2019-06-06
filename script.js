@@ -21,7 +21,6 @@ var randomMazeDensity = 1/3; // Fraction of blocks that are walls in a random ma
 // https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
 var maze1 = [ 
 	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-	// [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
 	[0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
 	[0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
@@ -327,7 +326,9 @@ function tick() {
 		return;
 	}
 
-	updateRobotPos();
+	var update = updateRobotPos();
+	var posChange = [update[0], update[1]];
+	var orienChange = update[2];
 	lidarDistances = fixLidarNegatives(noisifyLidar(computeLidarDistances(robotPos, robotOrien)));
 
 	measureParticles();
@@ -338,7 +339,7 @@ function tick() {
 	frames[frames.length-1].log();
 
 	resample();
-	translateParticles();
+	translateParticles(posChange, orienChange);
 
 	drawFrame(frames[frames.length-1]);
 
@@ -422,8 +423,12 @@ function resample() {
 	}
 	particles = newParticles.slice();
 }
-function translateParticles() {
-	//
+function translateParticles(posChange, orienChange) {
+	for(var i=0; i<numParticles; ++i) {
+		particles[i].pos[0] += posChange[0];
+		particles[i].pos[1] += posChange[1];
+		particles[i].orien += orienChange;
+	}
 }
 function makePrediction() {
 	//
@@ -435,12 +440,17 @@ function updateRobotPos() {
 	var downKey = 83; //S
 	var rightKey = 68; //D
 
+	var orienChange = 0;
+	var posChange = [0, 0];
+
 	// !undefined == true, !!undefined == false
 	if((!!keyStates[leftKey]) && !keyStates[rightKey]) {
-		robotOrien += (tickTime / 1000) * robotTurnRate;
+		orienChange = (tickTime / 1000) * robotTurnRate;
+		robotOrien += orienChange;
 	}
 	else if(!keyStates[leftKey] && (!!keyStates[rightKey])) {
-		robotOrien -= (tickTime / 1000) * robotTurnRate;
+		orienChange = -(tickTime / 1000) * robotTurnRate;
+		robotOrien += orienChange;
 	}
 
 	if((!!keyStates[upKey]) && !keyStates[downKey]) {
@@ -454,6 +464,7 @@ function updateRobotPos() {
 			robotPos[0] += dx;
 			robotPos[1] += dy;
 		}
+		posChange = [dx, dy];
 	}
 	else if(!keyStates[upKey] && (!!keyStates[downKey])) {
 		var dx = (tickTime / 1000) * robotSpeed * Math.cos(robotOrien);
@@ -466,7 +477,9 @@ function updateRobotPos() {
 			robotPos[0] -= dx;
 			robotPos[1] -= dy;
 		}
+		posChange = [dx, dy];
 	}
+	return [posChange[0], posChange[1], orienChange];
 }
 function isColliding(pos) {
 	if(pos[0] < 0 || pos[0] >= canvasSize[0] || pos[1] < 0 || pos[1] >= canvasSize[1]) {
