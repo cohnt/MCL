@@ -325,8 +325,15 @@ function tick() {
 	lidarDistances = computeLidarDistances(robotPos, robotOrien);
 	lidarDistances = noisifyLidar(lidarDistances);
 
+	measureParticles();
+	calculateWeights();
+	makePathGuess();
+
 	saveFrame();
 	frames[frames.length-1].log();
+
+	resample();
+	translateParticles();
 
 	drawFrame(frames[frames.length-1]);
 
@@ -357,6 +364,18 @@ function generateParticles() {
 		particles[i] = new Particle();
 		particles[i].randomize();
 	}
+}
+function measureParticles() {
+	//
+}
+function calculateWeights() {
+	//
+}
+function resample() {
+	//
+}
+function translateParticles() {
+	//
 }
 
 function updateRobotPos() {
