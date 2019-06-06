@@ -44,7 +44,7 @@ var tickTime = 1000 / tickRate; // ms per tick
 
 var robotSpeed = 60; // Robot speed, in pixels per second
 var robotTurnRate = 90 * (Math.PI / 180); // Robot turn rate, in radians per second
-var lidarNumPoints = 15; // Number of points given in each sweep of the lidar
+var lidarNumPoints = 25; // Number of points given in each sweep of the lidar
 var lidarFOV = 180 * (Math.PI / 180); // FOV of the lidar, in radians
 var lidarAngle = lidarFOV / (lidarNumPoints - 1); // The angle between two lidar beams
 var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar measurements
