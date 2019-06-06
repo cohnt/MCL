@@ -365,7 +365,9 @@ function generateParticles() {
 	}
 }
 function measureParticles() {
-	//
+	for(var i=0; i<numParticles; ++i) {
+		particles[i].lidarReadings = computeLidarDistances(particles[i].pos, particles[i].orien);
+	}
 }
 function calculateWeights() {
 	//
