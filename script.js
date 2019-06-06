@@ -260,6 +260,11 @@ function reset() {
 	robotPos[1] += 0.5 * mazeBoxHeight;
 	robotOrien = 0;
 	lidarDistances = new Array(lidarNumPoints).fill(0);
+	particles = [];
+	while(frameListTableHeader.nextSibling) {
+		//Delete all children of frameListCont.
+		frameListTableHeader.parentNode.removeChild(frameListTableHeader.nextSibling);
+	}
 	drawFrame();
 }
 
