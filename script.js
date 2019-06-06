@@ -460,6 +460,11 @@ function makePrediction() {
 	total[1] /= numUsed;
 	predictedPose = total.slice();
 }
+function sortParticles(particles) {
+	sorted = particles.slice()
+	sorted.sort((a, b) => (a.weight > b.weight) ? 1 : -1);
+	return sorted;
+}
 
 function updateRobotPos() {
 	var upKey = 87; //W
@@ -691,8 +696,9 @@ function drawFrame(frame) {
 		drawLidar(frame.robotPos, frame.robotOrien, frame.lidarDistances);
 	}
 	if(vizDrawParticles) {
+		sortedParticles = sortParticles(frame.particles);
 		for(var i=0; i<frame.particles.length; ++i) {
-			drawParticle(frame.particles[i], frame.maxNormalizedWeight);
+			drawParticle(sortedParticles[i], frame.maxNormalizedWeight);
 		}
 	}
 	if(vizParticleLIDAR) {
