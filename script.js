@@ -224,15 +224,34 @@ function updateRobotPos() {
 	if((!!keyStates[upKey]) && !keyStates[downKey]) {
 		var dx = (tickTime / 1000) * robotSpeed * Math.cos(robotOrien);
 		var dy = (tickTime / 1000) * robotSpeed * Math.sin(robotOrien);
-		robotPos[0] += dx;
-		robotPos[1] += dy;
+		var newPos = [
+			robotPos[0] + dx,
+			robotPos[1] + dy
+		];
+		if(!isColliding(newPos)) {
+			robotPos[0] += dx;
+			robotPos[1] += dy;
+		}
 	}
 	else if(!keyStates[upKey] && (!!keyStates[downKey])) {
 		var dx = (tickTime / 1000) * robotSpeed * Math.cos(robotOrien);
 		var dy = (tickTime / 1000) * robotSpeed * Math.sin(robotOrien);
-		robotPos[0] -= dx;
-		robotPos[1] -= dy;
+		var newPos = [
+			robotPos[0] - dx,
+			robotPos[1] - dy
+		];
+		if(!isColliding(newPos)) {
+			robotPos[0] -= dx;
+			robotPos[1] -= dy;
+		}
 	}
+}
+function isColliding(pos) {
+	var currentMazeIdx = coordToMazeIdx(pos);
+	console.log(currentMazeIdx);
+	var i = currentMazeIdx[0];
+	var j = currentMazeIdx[1];
+	return currentMaze[i][j] == true;
 }
 
 function drawFrame(frame) {
@@ -321,6 +340,13 @@ function mazeIdxToCoord(idx) {
 	var x = (j + 0.5) * mazeBoxWidth;
 	var y = ((canvasHeightBoxes-1) - i + 0.5) * mazeBoxHeight;
 	return [x, y];
+}
+function coordToMazeIdx(coord) {
+	var x = coord[0];
+	var y = coord[1];
+	var i = (canvasHeightBoxes-1) - Math.floor(y / mazeBoxHeight);
+	var j = Math.floor(x / mazeBoxWidth);
+	return [i, j]
 }
 
 ///////////////////////////////////////////
