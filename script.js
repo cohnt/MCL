@@ -21,6 +21,7 @@ var frameListCont; //The html object for the div where frames and frame informat
 var frameListTableHeader; //The html object for the header row of the frame list table
 var currentFrameCont = {}; //Contains the html objects for the current frame display
 var parameterElts = []; //Contains the html elements for the parameter text fields
+var keyStates = {}; //Contains the status of every key on the keyboard
 
 ///////////////////////////////////////////
 /// CLASSES
@@ -50,7 +51,41 @@ function setup() {
 		parameterElts.push(parElts[i]);
 	}
 
+	document.addEventListener("keydown", function(e) {
+		var keyId = e.which;
+		keyStates[keyId] = true;
+		console.log("Key down: " + keyId);
+		if(keyId == 39) { //Right arrow key
+			if(currentFrame < frames.length-1) {
+				++currentFrame;
+			}
+			drawFrame(frames[currentFrame]);
+		}
+		else if(keyId == 37) { //Left arrow key
+			if(currentFrame > 0) {
+				--currentFrame;
+			}
+			drawFrame(frames[currentFrame]);
+		}
+		else if(keyId == 48) { //0 key
+			currentFrame = 0;
+			drawFrame(frames[currentFrame]);
+		}
+		else if(keyId == 57) { //9 key
+			currentFrame = frames.length-1;
+			drawFrame(frames[currentFrame]);
+		}
+	});
+	document.addEventListener("keyup", function(e) {
+		var keyId = e.which;
+		keyStates[keyId] = false;
+	})
+
 	ctx = canvas.getContext("2d");
+}
+
+function drawFrame(frame) {
+	//Nothing for now
 }
 
 ///////////////////////////////////////////
