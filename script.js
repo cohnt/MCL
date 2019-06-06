@@ -20,8 +20,8 @@ var boxFillColor = "#333333";
 var randomMazeDensity = 1/3; // Fraction of blocks that are walls in a random maze
 // https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
 var maze1 = [ 
-	// [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+	// [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
 	[0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
 	[0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
@@ -45,7 +45,7 @@ var tickTime = 1000 / tickRate; // ms per tick
 
 var robotSpeed = 60; // Robot speed, in pixels per second
 var robotTurnRate = 90 * (Math.PI / 180); // Robot turn rate, in radians per second
-var lidarNumPoints = 25; // Number of points given in each sweep of the lidar
+var lidarNumPoints = 9; // Number of points given in each sweep of the lidar
 var lidarFOV = 180 * (Math.PI / 180); // FOV of the lidar, in radians
 var lidarAngle = lidarFOV / (lidarNumPoints - 1); // The angle between two lidar beams
 var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar measurements
@@ -376,7 +376,25 @@ function measureParticles() {
 	}
 }
 function calculateWeights() {
-	//
+	var lidarDataArr = [];
+	var lidarDataWeights = [];
+	for(var i=0; i<lidarNumPoints; ++i) {
+		lidarDataArr[i] = particles.map(a => Math.abs(a.lidarReadings[i] - lidarDistances[i]));
+		lidarDataWeights[i] = normalizeWeight(weightFromDistance(lidarDataArr[i]));
+	}
+	var combinedWeights = [];
+	for(var i=0; i<numParticles; ++i) {
+		combinedWeights[i] = 1;
+		for(var j=0; j<lidarNumPoints; ++j) {
+			combinedWeights[i] *= lidarDataWeights[j][i];
+		}
+	}
+
+	combinedWeights = normalizeWeight(combinedWeights);
+	for(var i=0; i<particles.length; ++i) {
+		particles[i].weight = combinedWeights[i];
+	}
+	console.log(particles[0].weight);
 }
 function resample() {
 	//
@@ -847,6 +865,15 @@ function cumsum(arr) {
 		arr[i] += arr[i-1];
 	}
 	return arr;
+}
+function weightFromDistance(distances) {
+	var v = variance(distances);
+	var m = 1/(Math.sqrt(2*Math.PI*v));
+	var weights = [];
+	for(var i=0; i<distances.length; ++i) {
+		weights[i] = Math.pow(Math.E, -(Math.pow((distances[i]), 2) / (2*v))) * m;
+	}
+	return weights;
 }
 
 ///////////////////////////////////////////
