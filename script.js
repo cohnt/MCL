@@ -322,8 +322,7 @@ function tick() {
 	}
 
 	updateRobotPos();
-	lidarDistances = computeLidarDistances(robotPos, robotOrien);
-	lidarDistances = noisifyLidar(lidarDistances);
+	lidarDistances = fixLidarNegatives(noisifyLidar(computeLidarDistances(robotPos, robotOrien)));
 
 	measureParticles();
 	calculateWeights();
@@ -580,6 +579,15 @@ function noisifyLidar(distances_in) {
 		distances_out[i] += randomNormal(0, lidarNoiseVariance);
 	}
 	return distances_out
+}
+function fixLidarNegatives(distances_in) {
+	distances_out = distances_in.slice();
+	for(var i=0; i<lidarNumPoints; ++i) {
+		if(distances_in[i] < 0) {
+			distances_out[i] = 0;
+		}
+	}
+	return distances_out;
 }
 function isZero(val) {
 	//
