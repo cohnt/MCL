@@ -130,7 +130,7 @@ function Frame(id, particles_in, robotPos_in, robotOrien_in, lidarDistances_in) 
 		}
 	}
 	var maxError = Math.pow(Math.E, -1*dist2(this.robotPos, this.particles[this.maxNormalizedIndex].pos))
-		+ Math.pow(Math.E, -1*angleDist(this.mouseOrien, this.particles[this.maxNormalizedIndex].heading));
+		+ Math.pow(Math.E, -1*angleDist(this.mouseOrien, this.particles[this.maxNormalizedIndex].orien));
 	this.frameColorMultiplier = maxError * weightColorMultiplier;
 
 	this.log = function() {
@@ -394,7 +394,6 @@ function calculateWeights() {
 	for(var i=0; i<particles.length; ++i) {
 		particles[i].weight = combinedWeights[i];
 	}
-	console.log(particles[0].weight);
 }
 function resample() {
 	var weightData = particles.map(a => a.weight);
@@ -408,7 +407,14 @@ function resample() {
 			++chkIndex;
 		}
 		chkVal += step;
-		newParticles[i] = new Particle(particles[chkIndex].pos, particles[chkIndex].heading);
+		var newPos = particles[chkIndex].pos;
+		var newOrien = particles[chkIndex].orien;
+		var randomDist = randomNormal(0, particlePosNoiseVariance);
+		var randomAngle = Math.random() * Math.PI;
+		newPos[0] += randomDist * Math.cos(randomAngle);
+		newPos[1] += randomDist * Math.sin(randomAngle);
+		newOrien += randomNormal(0, particleOrientationNoiseVariance);
+		newParticles[i] = new Particle(newPos, newOrien);
 	}
 	for(var i=newParticles.length; i<numParticles; ++i) {
 		newParticles[i] = new Particle();
