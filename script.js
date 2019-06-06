@@ -181,24 +181,32 @@ function resetButtonClick() {
 function randomMazeClick() {
 	if(!running) {
 		generateRandomMaze();
+		reset();
+		drawFrame();
 	}
 }
 function maze1Click() {
 	if(!running) {
 		currentMaze = maze1;
 		currentMazeStart = maze1Start;
+		reset();
+		drawFrame();
 	}
 }
 function maze2Click() {
 	if(!running) {
 		currentMaze = maze2;
 		currentMazeStart = maze2Start;
+		reset();
+		drawFrame();
 	}
 }
 function maze3Click() {
 	if(!running) {
 		currentMaze = maze3;
 		currentMazeStart = maze3Start;
+		reset();
+		drawFrame();
 	}
 }
 
