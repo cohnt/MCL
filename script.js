@@ -16,6 +16,8 @@ var robotMarkerTriangleAngle = 30 * (Math.PI / 180); //The front angle of the tr
 var boxBorderColor = "black";
 var boxFillColor = "#333333";
 
+var randomMazeDensity = 1/3; //Fraction of blocks that are walls in a random maze
+
 //https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
 var maze1 = [ 
 	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
@@ -28,7 +30,8 @@ var maze1 = [
 	[0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0],
 	[1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-];
+]; // This grid is exactly how it will appear
+var maze1Start = [0, 0]; //The robot will start in the center of maze1[0][0]
 
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
@@ -43,6 +46,7 @@ var parameterElts = []; // Contains the html elements for the parameter text fie
 var keyStates = {}; // Contains the status of every key on the keyboard
 var frames = []; // An array of each frame, with all interesting information
 var currentFrame = -1;
+var currentMaze = maze1;
 
 ///////////////////////////////////////////
 /// CLASSES
@@ -164,11 +168,29 @@ function drawRobot(pos, orien) {
 function drawMaze(maze) {
 	for(var i=0; i<maze.length; ++i) {
 		for(var j=0; j<maze[i].length; ++j) {
-			x = j;
-			y = (maze.length-1) - i
+			var x = j;
+			var y = (maze.length-1) - i
 			drawBox([x, y], maze[i][j])
 		}
 	}
+}
+
+function generateRandomMaze() {
+	var maze = []
+	for(var i=0; i<canvasHeightBoxes; ++i) {
+		maze[i] = []
+		for(var j=0; j<canvasWidthBoxes; ++j) {
+			maze[i][j] = (Math.random() < randomMazeDensity);
+		}
+	}
+	var mazeStart = [0, 0];
+	do {
+		mazeStart[0] = Math.floor(Math.random() * canvasHeightBoxes)
+		mazeStart[1] = Math.floor(Math.random() * canvasWidthBoxes)
+	}
+	while(maze[mazeStart[0]][mazeStart[1]] == true);
+	currentMaze = maze;
+	currentMazeStart = mazeStart;
 }
 
 ///////////////////////////////////////////
