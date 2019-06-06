@@ -108,7 +108,7 @@ function Particle(pos=[0,0], orien=0) {
 		var y = coords[1] + (Math.random() * mazeBoxHeight);
 		console.log(x);
 		console.log(y);
-		this.pox = [x, y];
+		this.pos = [x, y];
 		this.orien = Math.random() * 2 * Math.PI - Math.PI;
 		this.isExploration = true;
 	}
