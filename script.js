@@ -100,7 +100,15 @@ function Particle(pos=[0,0], orien=0) {
 	this.isExploration = false;
 
 	this.randomize = function() {
-		this.pos = [Math.random() * canvasSize[0], Math.random() * canvasSize[1]];
+		var idx = randomIdxInMaze();
+		console.log(idx);
+		var coords = mazeIdxToCoord(idx);
+		console.log(coords);
+		var x = coords[0] + (Math.random() * mazeBoxWidth);
+		var y = coords[1] + (Math.random() * mazeBoxHeight);
+		console.log(x);
+		console.log(y);
+		this.pox = [x, y];
 		this.orien = Math.random() * 2 * Math.PI - Math.PI;
 		this.isExploration = true;
 	}
@@ -710,7 +718,7 @@ function generateRandomMaze() {
 			maze[i][j] = (Math.random() < randomMazeDensity);
 		}
 	}
-	var mazeStart = randomCoordsInMaze();
+	var mazeStart = randomIdxInMaze();
 	currentMaze = maze;
 	currentMazeStart = mazeStart;
 }
@@ -728,14 +736,14 @@ function coordToMazeIdx(coord) {
 	var j = Math.floor(x / mazeBoxWidth);
 	return [i, j]
 }
-function randomCoordsInMaze() {
-	var coords = [0, 0];
+function randomIdxInMaze() {
+	var idx = [0, 0];
 	do {
-		coords[0] = Math.floor(Math.random() * canvasHeightBoxes)
-		coords[1] = Math.floor(Math.random() * canvasWidthBoxes)
+		idx[0] = Math.floor(Math.random() * canvasHeightBoxes)
+		idx[1] = Math.floor(Math.random() * canvasWidthBoxes)
 	}
-	while(currentMaze[coords[0]][coords[1]] == true);
-	return coords;
+	while(currentMaze[idx[0]][idx[1]] == true);
+	return idx;
 }
 
 function randomNormal(mu, sigma) {
