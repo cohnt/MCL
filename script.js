@@ -96,6 +96,10 @@ function setup() {
 function drawFrame(frame) {
 	//Nothing for now
 }
+
+function clearCanvas() {
+	ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
+}
 function drawRobot(pos, orien) {
 	// orien should be in radians
 	ctx.strokeStyle = robotColor;
