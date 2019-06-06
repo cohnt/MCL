@@ -126,14 +126,21 @@ function setup() {
 				}
 				drawFrame(frames[currentFrame]);
 				break;
-			case keyId == 48: //0 key
+			case 48: //0 key
 				currentFrame = 0;
 				drawFrame(frames[currentFrame]);
 				break;
-			case keyId == 57: //9 key
+			case 57: //9 key
 				currentFrame = frames.length-1;
 				drawFrame(frames[currentFrame]);
 				break;
+			case 32: //spacebar
+				if(running) {
+					pauseButtonClick();
+				}
+				else {
+					startButtonClick();
+				}
 		}
 	});
 	document.addEventListener("keyup", function(e) {
