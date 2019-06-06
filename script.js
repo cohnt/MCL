@@ -13,6 +13,9 @@ var robotColor = "black";
 var robotSize = 15; //Radius of the robot (in pixels)
 var robotMarkerTriangleAngle = 30 * (Math.PI / 180); //The front angle of the triangular robot marker
 
+var boxBorderColor = "black";
+var boxFillColor = "#333333";
+
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
 ///////////////////////////////////////////
@@ -111,19 +114,19 @@ function drawRobot(pos, orien) {
 	ctx.stroke();
 
 	// Draw a triangle showing orientation
-	dx = robotSize * Math.cos(orien)
-	dy = robotSize * Math.sin(orien)
-	front = [pos[0] + dx, pos[1] + dy]
+	var dx = robotSize * Math.cos(orien)
+	var dy = robotSize * Math.sin(orien)
+	var front = [pos[0] + dx, pos[1] + dy]
 
-	backLeftAngle = orien + Math.PI - robotMarkerTriangleAngle;
+	var backLeftAngle = orien + Math.PI - robotMarkerTriangleAngle;
 	dx = robotSize * Math.cos(backLeftAngle);
 	dy = robotSize * Math.sin(backLeftAngle);
-	backLeft = [pos[0] + dx, pos[1] + dy];
+	var backLeft = [pos[0] + dx, pos[1] + dy];
 
-	backRightAngle = orien + Math.PI + robotMarkerTriangleAngle;
+	var backRightAngle = orien + Math.PI + robotMarkerTriangleAngle;
 	dx = robotSize * Math.cos(backRightAngle);
 	dy = robotSize * Math.sin(backRightAngle);
-	backRight = [pos[0] + dx, pos[1] + dy];
+	var backRight = [pos[0] + dx, pos[1] + dy];
 	
 	ctx.beginPath();
 	ctx.moveTo(front[0], front[1]);
