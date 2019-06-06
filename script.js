@@ -806,8 +806,8 @@ function generateRandomMaze() {
 			maze[i][j] = (Math.random() < randomMazeDensity);
 		}
 	}
-	var mazeStart = randomIdxInMaze();
 	currentMaze = maze;
+	var mazeStart = randomIdxInMaze();
 	currentMazeStart = mazeStart;
 }
 function mazeIdxToCoord(idx) {
