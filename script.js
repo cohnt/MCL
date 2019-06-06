@@ -78,6 +78,18 @@ var lidarDistances = [];
 /// CLASSES
 ///////////////////////////////////////////
 
+function Particle(pos=[0,0], orien=0) {
+	this.pos = pos.slice();
+	this.orien = orien;
+	this.weight = 0;
+	this.isExploration = false;
+
+	this.randomize = function() {
+		this.pos = [Math.random() * canvasSize[0], Math.random() * canvasSize[1]];
+		this.orien = Math.random() * 2 * Math.PI - Math.PI;
+		this.isExploration = true;
+	}
+}
 
 ///////////////////////////////////////////
 /// FUNCTIONS
