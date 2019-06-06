@@ -374,6 +374,9 @@ function generateParticles() {
 }
 function measureParticles() {
 	for(var i=0; i<numParticles; ++i) {
+		if(!particleIsValid(particles[i])) {
+			particles[i].randomize();
+		}
 		particles[i].lidarReadings = computeLidarDistances(particles[i].pos, particles[i].orien);
 	}
 }
@@ -430,6 +433,18 @@ function translateParticles(posChange, orienChange) {
 		particles[i].pos[1] += posChange[1];
 		particles[i].orien += orienChange;
 	}
+}
+function particleIsValid(p) {
+	if(p.pos[0] < 0 || p.pos[0] >= canvasSize[0] || p.pos[1] < 0 || p.pos[1] >=canvasSize[1]) {
+		return false;
+	}
+	var idx = coordToMazeIdx(p.pos);
+	var i = idx[0];
+	var j = idx[1];
+	if(currentMaze[i][j] == true) {
+		return false;
+	}
+	return true;
 }
 function makePrediction() {
 	//
