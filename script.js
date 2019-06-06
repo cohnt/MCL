@@ -52,6 +52,17 @@ var lidarNoiseVariance = 5; //The variance of the noise affecting the lidar meas
 
 var vizDrawLidar = true;
 
+var numParticles = 500;
+var particlePosNoiseVariance = 5;
+var particleOrientationNoiseVariance = 15 * (Math.PI / 180);
+var explorationFactor = 0.01; //0.0 means no particles are randomly placed for exploration, 0.5 means 50%, 1.0 means 100%
+var useExplorationParticlesGuess = false; //Whether or not to use exploration particles when estimating mouse location.
+
+var particleDispRadius = 2;
+var particleDispHeadingLength = 5; //Length of the direction marker for each particle
+var errorWeightColorDivisor = 300;
+var weightColorMultiplier = 0.9;
+
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
 ///////////////////////////////////////////
@@ -73,6 +84,7 @@ var stop = false;
 var robotPos = [0, 0];
 var robotOrien = 0;
 var lidarDistances = [];
+var particles = []; //Array of the particles used for the filter
 
 ///////////////////////////////////////////
 /// CLASSES
@@ -82,6 +94,7 @@ function Particle(pos=[0,0], orien=0) {
 	this.pos = pos.slice();
 	this.orien = orien;
 	this.weight = 0;
+	this.lidarReadings = new Array(lidarNumPoints).fill(0);
 	this.isExploration = false;
 
 	this.randomize = function() {
