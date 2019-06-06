@@ -17,7 +17,6 @@ var boxBorderColor = "black";
 var boxFillColor = "#333333";
 
 var randomMazeDensity = 1/3; // Fraction of blocks that are walls in a random maze
-
 // https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
 var maze1 = [ 
 	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
@@ -39,6 +38,12 @@ var maze2Start = maze1Start;
 var maze3 = maze1;
 var maze3Start = maze1Start;
 
+var tickRate = 5; // Ticks per second
+var tickTime = 1000 / tickRate; // ms per tick
+
+var robotSpeed = 60; // Robot speed, in pixels per second
+var robotTurnRate = 90 * (Math.PI / 180); // Robot turn rate, in radians per second
+
 ///////////////////////////////////////////
 /// GLOBAL VARIABLES
 ///////////////////////////////////////////
@@ -54,7 +59,9 @@ var frames = []; // An array of each frame, with all interesting information
 var currentFrame = -1;
 var currentMaze = maze1;
 var currentMazeStart = maze1Start;
+var hasStarted = false;
 var running = false;
+var stop = false;
 var robotPos = [0, 0];
 var robotOrien = 0;
 
@@ -80,6 +87,10 @@ function setup() {
 	currentFrameCont.guessPos = document.getElementById("currentFrameGuess");
 	currentFrameCont.error = document.getElementById("currentFrameError");
 	currentFrameCont.color = document.getElementById("currentFrameColor");
+
+	document.getElementById("startButton").addEventListener("click", startButtonClick);
+	document.getElementById("pauseButton").addEventListener("click", pauseButtonClick);
+	document.getElementById("resetButton").addEventListener("click", resetButtonClick);
 
 	document.getElementById("randomMazeButton").addEventListener("click", randomMazeClick)
 	document.getElementById("maze1Button").addEventListener("click", maze1Click)
@@ -126,8 +137,33 @@ function setup() {
 	ctx = canvas.getContext("2d");
 	ctx.transform(1, 0, 0, -1, 0, 0); // Flip the context so y+ is up
 	ctx.transform(1, 0, 0, 1, 0, -canvasSize[1]); //Move 0,0 to the bottom left of the screen
+
+	reset();
 }
 
+function startButtonClick() {
+	if(!running && !hasStarted) {
+		reset();
+		running = true;
+		hasStarted = true;
+		tick();
+	}
+	else if(!running && hasStarted) {
+		running = true;
+		tick();
+	}
+}
+function pauseButtonClick() {
+	if(running) {
+		stop = true;
+	}
+}
+function resetButtonClick() {
+	if(!running) {
+		hasStarted = false;
+		reset();
+	}
+}
 function randomMazeClick() {
 	if(!running) {
 		generateRandomMaze();
@@ -152,14 +188,60 @@ function maze3Click() {
 	}
 }
 
+function tick() {
+	if(stop) {
+		running = false;
+		stop = false;
+		return;
+	}
+
+	updateRobotPos();
+
+	drawFrame();
+
+	window.setTimeout(tick, tickTime);
+}
+function reset() {
+	robotPos = mazeIdxToCoord(currentMazeStart);
+	robotOrien = 0;
+	drawFrame();
+}
+
+function updateRobotPos() {
+	var upKey = 87; //W
+	var leftKey = 65; //A
+	var downKey = 83; //S
+	var rightKey = 68; //D
+
+	// !undefined == true, !!undefined == false
+	if((!!keyStates[leftKey]) && !keyStates[rightKey]) {
+		robotOrien += (tickTime / 1000) * robotTurnRate;
+	}
+	else if(!keyStates[leftKey] && (!!keyStates[rightKey])) {
+		robotOrien -= (tickTime / 1000) * robotTurnRate;
+	}
+
+	if((!!keyStates[upKey]) && !keyStates[downKey]) {
+		var dx = (tickTime / 1000) * robotSpeed * Math.cos(robotOrien);
+		var dy = (tickTime / 1000) * robotSpeed * Math.sin(robotOrien);
+		robotPos[0] += dx;
+		robotPos[1] += dy;
+	}
+	else if(!keyStates[upKey] && (!!keyStates[downKey])) {
+		var dx = (tickTime / 1000) * robotSpeed * Math.cos(robotOrien);
+		var dy = (tickTime / 1000) * robotSpeed * Math.sin(robotOrien);
+		robotPos[0] -= dx;
+		robotPos[1] -= dy;
+	}
+}
 
 function drawFrame(frame) {
 	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
 }
-
 function clearCanvas() {
+	//
 	ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
 }
 function drawBox(gridPos, filled) {
