@@ -335,6 +335,7 @@ function reset() {
 		//Delete all children of frameListCont.
 		frameListTableHeader.parentNode.removeChild(frameListTableHeader.nextSibling);
 	}
+	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
 }
@@ -555,7 +556,6 @@ function drawFrame(frame) {
 	drawMaze(currentMaze);
 	drawRobot(frame.robotPos, frame.robotOrien);
 	if(vizDrawLidar) {
-		console.log(frame.lidarDistances);
 		drawLidar(frame.robotPos, frame.robotOrien, frame.lidarDistances);
 	}
 	if(vizDrawParticles) {
