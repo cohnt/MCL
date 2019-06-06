@@ -678,15 +678,15 @@ function drawMaze(maze) {
 function drawLidar(pos, orien, distances) {
 	// Note: distances.length == lidarNumPoints
 	for(var i=0; i<lidarNumPoints; ++i) {
-		var robotFrameAngle = (-lidarFOV / 2) + (i * lidarAngle);
-		var globalFrameAngle = robotFrameAngle + robotOrien;
+		var frameAngle = (-lidarFOV / 2) + (i * lidarAngle);
+		var globalFrameAngle = frameAngle + orien;
 		var dx = distances[i] * Math.cos(globalFrameAngle);
 		var dy = distances[i] * Math.sin(globalFrameAngle);
 
 		ctx.strokeStyle = lidarBeamColor;
 		ctx.beginPath();
-		ctx.moveTo(robotPos[0], robotPos[1]);
-		ctx.lineTo(robotPos[0] + dx, robotPos[1] + dy);
+		ctx.moveTo(pos[0], pos[1]);
+		ctx.lineTo(pos[0] + dx, pos[1] + dy);
 		ctx.stroke();
 	}
 }
