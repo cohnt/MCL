@@ -272,10 +272,12 @@ function drawBox(gridPos, filled) {
 	var y0 = gridPos[1] * mazeBoxHeight;
 	var dx = mazeBoxWidth;
 	var dy = mazeBoxHeight;
+	ctx.strokeStyle = boxBorderColor;
 	ctx.beginPath();
 	ctx.rect(x0, y0, dx, dy);
 	ctx.stroke();
 	if(filled) {
+		ctx.fillStyle = boxFillColor;
 		ctx.fillRect(x0, y0, dx, dy);
 	}
 }
