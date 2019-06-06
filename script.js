@@ -247,6 +247,7 @@ function setup() {
 				}
 				break;
 			case 32: //spacebar
+				e.preventDefault();
 				if(running) {
 					pauseButtonClick();
 				}
