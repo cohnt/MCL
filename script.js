@@ -729,11 +729,11 @@ function coordToMazeIdx(coord) {
 	return [i, j]
 }
 
-function randomNormal(mean, variance) {
+function randomNormal(mu, sigma) {
 	var u1 = Math.random();
 	var u2 = Math.random();
 	var z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-	return mean + (z0 * variance);
+	return mu + (z0 * sigma);
 }
 function weightToColor(weight) {
 	if(weight > 1) {
@@ -797,6 +797,39 @@ function angleDist(a, b) {
 		return lhs - (Math.floor(lhs/rhs) * rhs);
 	}
 	return (specialMod(diff + Math.PI, Math.PI*2)) - Math.PI;
+}
+function mean(arr) {
+	var total = 0;
+	for(var i=0; i<arr.length; ++i) {
+		total += arr[i];
+	}
+	return total / arr.length;
+}
+function variance(arr) {
+	var v = 0;
+	var m = mean(arr);
+	for(var i=0; i<arr.length; ++i) {
+		v += arr[i]*arr[i];
+	}
+	v /= arr.length;
+	v -= m*m;
+	return v;
+}
+function normalizeWeight(arr) {
+	var total = 0;
+	for(var i=0; i<arr.length; ++i) {
+		total += arr[i];
+	}
+	for(var i=0; i<arr.length; ++i) {
+		arr[i] /= total;
+	}
+	return arr;
+}
+function cumsum(arr) {
+	for(var i=1; i<arr.length; ++i) {
+		arr[i] += arr[i-1];
+	}
+	return arr;
 }
 
 ///////////////////////////////////////////
