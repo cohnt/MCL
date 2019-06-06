@@ -455,10 +455,7 @@ function computeLidarDistances(pos, orien) {
 }
 function noisifyLidar() {
 	for(var i=0; i<lidarNumPoints; ++i) {
-		var u1 = Math.random();
-		var u2 = Math.random();
-		var z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-		lidarDistances[i] += (z0 * lidarNoiseVariance);
+		lidarDistances[i] += randomNormal(0, lidarNoiseVariance);
 	}
 }
 function isZero(val) {
@@ -579,6 +576,13 @@ function coordToMazeIdx(coord) {
 	var i = (canvasHeightBoxes-1) - Math.floor(y / mazeBoxHeight);
 	var j = Math.floor(x / mazeBoxWidth);
 	return [i, j]
+}
+
+function randomNormal(mean, variance) {
+	var u1 = Math.random();
+	var u2 = Math.random();
+	var z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+	return mean + (z0 * variance);
 }
 
 ///////////////////////////////////////////
