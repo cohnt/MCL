@@ -264,6 +264,16 @@ function setup() {
 
 	reset();
 }
+function resetContext() {
+	canvas.setAttribute("width", String(canvasSize[0]) + "px");
+	canvas.setAttribute("height", String(canvasSize[1]) + "px");
+
+	ctx = canvas.getContext("2d");
+	ctx.transform(1, 0, 0, -1, 0, 0); // Flip the context so y+ is up
+	ctx.transform(1, 0, 0, 1, 0, -canvasSize[1]); //Move 0,0 to the bottom left of the screen
+
+	reset();
+}
 
 function startButtonClick() {
 	if(!running && !hasStarted) {
