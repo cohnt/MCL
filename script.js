@@ -981,6 +981,22 @@ function weightFromDistance(distances) {
 	return weights;
 }
 
+function prettyPrintMazeArr(maze) {
+	console.log("[");
+	for(var i=0; i<maze.length; ++i) {
+		lineStr = "\t[";
+		var j=0;
+		for(; j<maze[i].length-1; ++j) {
+			lineStr += String(Number(maze[i][j]));
+			lineStr += ", ";
+		}
+		lineStr += String(Number(maze[i][j]));
+		lineStr += "],";
+		console.log(lineStr);
+	}
+	console.log("]");
+}
+
 ///////////////////////////////////////////
 /// EXECUTED CODE
 ///////////////////////////////////////////
