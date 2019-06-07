@@ -109,6 +109,7 @@
 						mazeBoxWidth = Number(elt.value);
 						mazeBoxSize = [mazeBoxWidth, mazeBoxHeight];
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+						robotSize = Math.min(mazeBoxWidth, mazeBoxHeight) / 4
 						resetContext();
 					}
 				})(this)">60</textarea></td>
@@ -121,6 +122,7 @@
 						mazeBoxHeight = Number(elt.value);
 						mazeBoxSize = [mazeBoxWidth, mazeBoxHeight];
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+						robotSize = Math.min(mazeBoxWidth, mazeBoxHeight) / 4
 						resetContext();
 					}
 				})(this)">60</textarea></td>

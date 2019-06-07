@@ -10,7 +10,7 @@ var canvasHeightBoxes = 10; //Number of boxes vertically in the canvas
 var canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight]
 
 var robotColor = "black";
-var robotSize = 15; //Radius of the robot (in pixels)
+var robotSize = Math.min(mazeBoxWidth, mazeBoxHeight) / 4; //Radius of the robot (in pixels)
 var robotMarkerTriangleAngle = 30 * (Math.PI / 180); //The front angle of the triangular robot marker
 var lidarBeamColor = "red";
 
