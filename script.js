@@ -32,7 +32,6 @@ var maze1 = [
 	[1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
 ]; // This grid is exactly how it will appear
 var maze1Start = [0, 0]; // The robot will start in the center of maze1[0][0]
-
 var maze2 = [
 	[1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0],
@@ -46,7 +45,6 @@ var maze2 = [
 	[1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0],
 ]
 var maze2Start = [8, 2];
-
 var maze3 = [
 	[1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0],
 	[0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0],
