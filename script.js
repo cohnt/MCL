@@ -383,6 +383,8 @@ function reset() {
 	drawRobot(robotPos, robotOrien);
 	frames = [];
 	hasStarted = false;
+	document.getElementById("mazeStarti").value = currentMazeStart[0];
+	document.getElementById("mazeStartj").value = currentMazeStart[1];
 }
 function saveFrame() {
 	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances, predictedPose);

@@ -159,12 +159,12 @@
 			</tr>
 			<tr>
 				<td>Starting Location</td>
-				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+				<td><textarea id="mazeStarti" class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) >= 0 && Number(elt.value) < canvasHeightBoxes) {
 						currentMazeStart[0] = Number(elt.value);
 						reset();
 					}
-				})(this)">0</textarea>&nbsp;<textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+				})(this)">0</textarea>&nbsp;<textarea id="mazeStartj" class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) >= 0 && Number(elt.value) < canvasWidthBoxes) {
 						currentMazeStart[1] = Number(elt.value);
 						reset();
