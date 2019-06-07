@@ -31,6 +31,9 @@
 			border: 1px dotted black;
 			background-color: #eeeeee;
 		}
+		div#parameters {
+			font-size: 14px;
+		}
 	</style>
 </head>
 
@@ -109,6 +112,7 @@
 						resetContext();
 					}
 				})(this)"></textarea></td>
+				<td>The width (in pixels) of each cell in the maze.</td>
 			</tr>
 			<tr>
 				<td>Cell Height</td>
@@ -120,6 +124,7 @@
 						resetContext();
 					}
 				})(this)"></textarea></td>
+				<td>The height (in pixels) of each cell in the maze.</td>
 			</tr>
 			<tr>
 				<td>Maze Width</td>
@@ -130,6 +135,7 @@
 						resetContext();
 					}
 				})(this)"></textarea></td>
+				<td>The width of the maze, in number of cells.</td>
 			</tr>
 			<tr>
 				<td>Maze Height</td>
@@ -140,6 +146,7 @@
 						resetContext();
 					}
 				})(this)"></textarea></td>
+				<td>The height of the maze, in number of cells.</td>
 			</tr>
 			<tr>
 				<td>Random Maze Density</td>
@@ -148,18 +155,22 @@
 						randomMazeDensity = Number(elt.value);
 					}
 				})(this)"></textarea></td>
+				<td>The probability of each cell being a wall when generating a random maze. Should be in the range [0,1].</td>
 			</tr>
 			<tr>
 				<td>Starting Location</td>
 				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) >= 0 && Number(elt.value) < canvasHeightBoxes) {
 						currentMazeStart[0] = Number(elt.value);
+						reset();
 					}
 				})(this)"></textarea>&nbsp;<textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) >= 0 && Number(elt.value) < canvasWidthBoxes) {
 						currentMazeStart[1] = Number(elt.value);
+						reset();
 					}
 				})(this)"></textarea></td>
+				<td>The starting cell of the robot. The first entry is the row, and the second entry is the column.</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
 			<tr><th>Simulation Settings</th></tr>
@@ -171,6 +182,7 @@
 						tickTime = 1000 / tickRate;
 					}
 				})(this)"></textarea></td>
+				<td>The number of ticks per second.</td>
 			</tr>
 			<tr>
 				<td>LIDAR Noise</td>
@@ -179,6 +191,7 @@
 						lidarNoiseVariance = Number(elt.value);
 					}
 				})(this)"></textarea></td>
+				<td>Variance of the noise added to LIDAR measurements.</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
 			<tr><th>Robot Properties</th></tr>
@@ -189,6 +202,7 @@
 						robotSpeed = Number(elt.value);
 					}
 				})(this)"></textarea></td>
+				<td>Speed of the robot, in pixels per second.</td>
 			</tr>
 			<tr>
 				<td>Turn Rate</td>
@@ -197,6 +211,7 @@
 						robotTurnRate = Number(elt.value) * (Math.PI / 180);
 					}
 				})(this)"></textarea></td>
+				<td>Turn rate of the robot, in degrees per second.</td>
 			</tr>
 			<tr>
 				<td>LIDAR Resolution</td>
@@ -206,6 +221,7 @@
 						lidarAngle = lidarFOV / (lidarNumPoints - 1);
 					}
 				})(this)"></textarea></td>
+				<td>Number of points the LIDAR measures.</td>
 			</tr>
 			<tr>
 				<td>LIDAR FOV</td>
@@ -215,6 +231,7 @@
 						lidarAngle = lidarFOV / (lidarNumPoints - 1);
 					}
 				})(this)"></textarea></td>
+				<td>The field of view of the LIDAR, in degrees.</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
 			<tr><th>Particle Filter Properties</th></tr>
@@ -225,6 +242,7 @@
 						numParticles = Number(elt.value);
 					}
 				})(this)"></textarea></td>
+				<td>How many particles to use in the particle filter.</td>
 			</tr>
 			<tr>
 				<td>Position Noise</td>
@@ -233,6 +251,7 @@
 						particlePosNoiseVariance = Number(elt.value);
 					}
 				})(this)"></textarea></td>
+				<td>Variance of the noise added to the position of particles during resampling.</td>
 			</tr>
 			<tr>
 				<td>Orientation Noise</td>
@@ -241,6 +260,7 @@
 						particleOrientationNoiseVariance = Number(elt.value) * (Math.PI / 180);
 					}
 				})(this)"></textarea></td>
+				<td>Variance of the noise added to the orientation of particles during resampling.</td>
 			</tr>
 			<tr>
 				<td>Exploration Percentage</td>
@@ -249,6 +269,7 @@
 						explorationFactor = Number(elt.value);
 					}
 				})(this)"></textarea></td>
+				<td>Fraction of particles randomly sampled each iteration. Should be in the range [0,1].</td>
 			</tr>
 			<!-- <tr>
 				<td>Parameter</td>
