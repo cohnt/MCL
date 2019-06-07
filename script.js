@@ -211,52 +211,7 @@ function setup() {
 	}
 
 	document.addEventListener("keydown", function(e) {
-		e = e || window.event;
-		var target = e.target || e.srcElement;
-		if ( !/INPUT|TEXTAREA|SELECT|BUTTON/.test(target.nodeName) ) {
-			// Ignore 
-			var keyId = e.which;
-			keyStates[keyId] = true;
-			console.log("Key down: " + keyId);
-			switch(keyId) {
-				case 39: //Right arrow key
-					if(!running) {
-						if(currentFrame < frames.length-1) {
-							++currentFrame;
-						}
-					}
-					drawFrame(frames[currentFrame]);
-					break;
-				case 37: //Left arrow key
-					if(!running) {
-						if(currentFrame > 0) {
-							--currentFrame;
-						}
-					}
-					drawFrame(frames[currentFrame]);
-					break;
-				case 48: //0 key
-					if(!running) {
-						currentFrame = 0;
-						drawFrame(frames[currentFrame]);
-					}
-					break;
-				case 57: //9 key
-					if(!running) {
-						currentFrame = frames.length-1;
-						drawFrame(frames[currentFrame]);
-					}
-					break;
-				case 32: //spacebar
-					e.preventDefault();
-					if(running) {
-						pauseButtonClick();
-					}
-					else {
-						startButtonClick();
-					}
-			}
-		}
+		keydownHandler(e);
 	});
 	document.addEventListener("keyup", function(e) {
 		var keyId = e.which;
@@ -268,6 +223,54 @@ function setup() {
 	ctx.transform(1, 0, 0, 1, 0, -canvasSize[1]); //Move 0,0 to the bottom left of the screen
 
 	reset();
+}
+function keydownHandler(e) {
+	e = e || window.event;
+	var target = e.target || e.srcElement;
+	if ( !/INPUT|TEXTAREA|SELECT|BUTTON/.test(target.nodeName) ) {
+		// Ignore 
+		var keyId = e.which;
+		keyStates[keyId] = true;
+		console.log("Key down: " + keyId);
+		switch(keyId) {
+			case 39: //Right arrow key
+				if(!running) {
+					if(currentFrame < frames.length-1) {
+						++currentFrame;
+					}
+				}
+				drawFrame(frames[currentFrame]);
+				break;
+			case 37: //Left arrow key
+				if(!running) {
+					if(currentFrame > 0) {
+						--currentFrame;
+					}
+				}
+				drawFrame(frames[currentFrame]);
+				break;
+			case 48: //0 key
+				if(!running) {
+					currentFrame = 0;
+					drawFrame(frames[currentFrame]);
+				}
+				break;
+			case 57: //9 key
+				if(!running) {
+					currentFrame = frames.length-1;
+					drawFrame(frames[currentFrame]);
+				}
+				break;
+			case 32: //spacebar
+				e.preventDefault();
+				if(running) {
+					pauseButtonClick();
+				}
+				else {
+					startButtonClick();
+				}
+		}
+	}
 }
 function resetContext() {
 	canvas.setAttribute("width", String(canvasSize[0]) + "px");
