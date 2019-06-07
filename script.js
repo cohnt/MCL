@@ -344,6 +344,8 @@ function resetButtonClick() {
 function randomMazeClick() {
 	if(!running) {
 		generateRandomMaze();
+		document.getElementById("mazeHeight").value = currentMaze.length;
+		document.getElementById("mazeWidth").value = currentMaze[0].length;
 		reset();
 	}
 }
@@ -355,6 +357,8 @@ function maze1Click() {
 		canvasWidthBoxes = currentMaze[0].length;
 		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
 		resetContext();
+		document.getElementById("mazeHeight").value = currentMaze.length;
+		document.getElementById("mazeWidth").value = currentMaze[0].length;
 		reset();
 	}
 }
@@ -366,6 +370,8 @@ function maze2Click() {
 		canvasWidthBoxes = currentMaze[0].length;
 		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
 		resetContext();
+		document.getElementById("mazeHeight").value = currentMaze.length;
+		document.getElementById("mazeWidth").value = currentMaze[0].length;
 		reset();
 	}
 }
@@ -377,6 +383,8 @@ function maze3Click() {
 		canvasWidthBoxes = currentMaze[0].length;
 		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
 		resetContext();
+		document.getElementById("mazeHeight").value = currentMaze.length;
+		document.getElementById("mazeWidth").value = currentMaze[0].length;
 		reset();
 	}
 }
@@ -421,12 +429,10 @@ function reset() {
 	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
-	frames = [];
-	hasStarted = false;
 	document.getElementById("mazeStarti").value = currentMazeStart[0];
 	document.getElementById("mazeStartj").value = currentMazeStart[1];
-	document.getElementById("mazeHeight").value = currentMaze.length;
-	document.getElementById("mazeWidth").value = currentMaze[0].length;
+	frames = [];
+	hasStarted = false;
 }
 function saveFrame() {
 	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances, predictedPose);
