@@ -219,12 +219,12 @@
 			<tr>
 				<td>LIDAR Resolution</td>
 				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
-					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 1) {
 						lidarNumPoints = Number(elt.value);
 						lidarAngle = lidarFOV / (lidarNumPoints - 1);
 					}
 				})(this)">25</textarea></td>
-				<td>Number of points the LIDAR measures.</td>
+				<td>Number of points the LIDAR measures. Must be at least 2.</td>
 			</tr>
 			<tr>
 				<td>LIDAR FOV</td>
