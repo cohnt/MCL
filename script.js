@@ -357,6 +357,7 @@ function reset() {
 	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
+	frames = [];
 	hasStarted = false;
 }
 function saveFrame() {
