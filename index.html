@@ -101,57 +101,154 @@
 			<tr><th>Maze Properties</th></tr>
 			<tr>
 				<td>Cell Width</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) > 0) {
+						mazeBoxWidth = Number(elt.value);
+						mazeBoxSize = [mazeBoxWidth, mazeBoxHeight];
+						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+						resetContext();
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Cell Height</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) > 0) {
+						mazeBoxHeight = Number(elt.value);
+						mazeBoxSize = [mazeBoxWidth, mazeBoxHeight];
+						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+						resetContext();
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Maze Width</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
+						canvasWidthBoxes = Number(elt.value);
+						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+						resetContext();
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Maze Height</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
+						canvasHeightBoxes = Number(elt.value);
+						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+						resetContext();
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Random Maze Density</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) >= 0 && Number(elt.value) <= 1.0) {
+						randomMazeDensity = Number(elt.value);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Starting Location</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) >= 0 && Number(elt.value) < canvasHeightBoxes) {
+						currentMazeStart[0] = Number(elt.value);
+					}
+				})(this)"></textarea>&nbsp;<textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) >= 0 && Number(elt.value) < canvasWidthBoxes) {
+						currentMazeStart[1] = Number(elt.value);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
 			<tr><th>Simulation Settings</th></tr>
 			<tr>
 				<td>Tick Rate</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) > 0) {
+						tickRate = Number(elt.value);
+						tickTime = 1000 / tickRate;
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>LIDAR Noise</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(!isNaN(elt.value)) {
+						lidarNoiseVariance = Number(elt.value);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
 			<tr><th>Robot Properties</th></tr>
 			<tr>
 				<td>Speed</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) > 0) {
+						robotSpeed = Number(elt.value);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Turn Rate</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) > 0) {
+						robotTurnRate = Number(elt.value) * (Math.PI / 180);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>LIDAR Resolution</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
+						lidarNumPoints = Number(elt.value);
+						lidarAngle = lidarFOV / (lidarNumPoints - 1);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>LIDAR FOV</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) > 0 && Number(elt.value) <= 360) {
+						lidarFOV = Number(elt.value) * (Math.PI / 180);
+						lidarAngle = lidarFOV / (lidarNumPoints - 1);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
 			<tr><th>Particle Filter Properties</th></tr>
 			<tr>
 				<td>Number of Particles</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
+						numParticles = Number(elt.value);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Position Noise</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) >= 0) {
+						particlePosNoiseVariance = Number(elt.value);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Orientation Noise</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) >= 0) {
+						particleOrientationNoiseVariance = Number(elt.value) * (Math.PI / 180);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<tr>
 				<td>Exploration Percentage</td>
+				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+					if(Number(elt.value) >= 0 && Number(elt.value) <= 1.0) {
+						explorationFactor = Number(elt.value);
+					}
+				})(this)"></textarea></td>
 			</tr>
 			<!-- <tr>
 				<td>Parameter</td>
