@@ -35,6 +35,7 @@
 			font-size: 14px;
 		}
 	</style>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
 </head>
 
 <body>
@@ -130,7 +131,7 @@
 			</tr>
 			<tr>
 				<td>Maze Width</td>
-				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+				<td><textarea id="mazeWidth" class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
 						canvasWidthBoxes = Number(elt.value);
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
@@ -141,7 +142,7 @@
 			</tr>
 			<tr>
 				<td>Maze Height</td>
-				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+				<td><textarea id="mazeHeight" class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
 						canvasHeightBoxes = Number(elt.value);
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
@@ -218,12 +219,12 @@
 			<tr>
 				<td>LIDAR Resolution</td>
 				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
-					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
+					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 1) {
 						lidarNumPoints = Number(elt.value);
 						lidarAngle = lidarFOV / (lidarNumPoints - 1);
 					}
 				})(this)">25</textarea></td>
-				<td>Number of points the LIDAR measures.</td>
+				<td>Number of points the LIDAR measures. Must be at least 2.</td>
 			</tr>
 			<tr>
 				<td>LIDAR FOV</td>

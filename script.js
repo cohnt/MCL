@@ -20,24 +20,44 @@ var boxFillColor = "#333333";
 var randomMazeDensity = 1/3; // Fraction of blocks that are walls in a random maze
 // https://www.researchgate.net/figure/18-An-example-of-a-simple-maze-created-using-a-WallMaker-that-makes-the-red-wall-parts_fig29_259979929
 var maze1 = [ 
-	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-	[0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
-	[0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
-	[0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-	[0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
-	[1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1],
-	[0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
-	[0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0],
-	[1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+	[0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1],
+	[0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+	[0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0],
+	[0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+	[1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1],
+	[0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+	[0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1],
+	[1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
 ]; // This grid is exactly how it will appear
 var maze1Start = [0, 0]; // The robot will start in the center of maze1[0][0]
-
-// TODO
-var maze2 = maze1;
-var maze2Start = maze1Start;
-var maze3 = maze1;
-var maze3Start = maze1Start;
+var maze2 = [
+	[1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0],
+	[1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0],
+	[0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
+	[1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0],
+	[0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1],
+	[0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0],
+	[0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0],
+	[0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+	[1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0],
+]
+var maze2Start = [8, 2];
+var maze3 = [
+	[1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0],
+	[0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0],
+	[0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0],
+	[0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+	[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+	[0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1],
+	[0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0],
+]
+var maze3Start = [2, 2];
 
 var tickRate = 25; // Ticks per second
 var tickTime = 1000 / tickRate; // ms per tick
@@ -331,6 +351,10 @@ function maze1Click() {
 	if(!running) {
 		currentMaze = maze1;
 		currentMazeStart = maze1Start;
+		canvasHeightBoxes = currentMaze.length;
+		canvasWidthBoxes = currentMaze[0].length;
+		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+		resetContext();
 		reset();
 	}
 }
@@ -338,6 +362,10 @@ function maze2Click() {
 	if(!running) {
 		currentMaze = maze2;
 		currentMazeStart = maze2Start;
+		canvasHeightBoxes = currentMaze.length;
+		canvasWidthBoxes = currentMaze[0].length;
+		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+		resetContext();
 		reset();
 	}
 }
@@ -345,6 +373,10 @@ function maze3Click() {
 	if(!running) {
 		currentMaze = maze3;
 		currentMazeStart = maze3Start;
+		canvasHeightBoxes = currentMaze.length;
+		canvasWidthBoxes = currentMaze[0].length;
+		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+		resetContext();
 		reset();
 	}
 }
@@ -393,6 +425,8 @@ function reset() {
 	hasStarted = false;
 	document.getElementById("mazeStarti").value = currentMazeStart[0];
 	document.getElementById("mazeStartj").value = currentMazeStart[1];
+	document.getElementById("mazeHeight").value = currentMaze.length;
+	document.getElementById("mazeWidth").value = currentMaze[0].length;
 }
 function saveFrame() {
 	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances, predictedPose);
@@ -979,6 +1013,22 @@ function weightFromDistance(distances) {
 		weights[i] = Math.pow(Math.E, -(Math.pow((distances[i]), 2) / (2*v))) * m;
 	}
 	return weights;
+}
+
+function prettyPrintMazeArr(maze) {
+	console.log("[");
+	for(var i=0; i<maze.length; ++i) {
+		lineStr = "\t[";
+		var j=0;
+		for(; j<maze[i].length-1; ++j) {
+			lineStr += String(Number(maze[i][j]));
+			lineStr += ", ";
+		}
+		lineStr += String(Number(maze[i][j]));
+		lineStr += "],";
+		console.log(lineStr);
+	}
+	console.log("]");
 }
 
 ///////////////////////////////////////////
