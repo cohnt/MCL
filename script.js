@@ -274,9 +274,22 @@ function resetContext() {
 
 	reset();
 }
+function readonly(doMakeReadonly) {
+	for(var i=0; i<parameterElts.length; ++i) {
+		if(doMakeReadonly) {
+			parameterElts[i].readOnly = "true";
+			parameterElts[i].style.color = "grey";
+		}
+		else {
+			parameterElts[i].removeAttribute("readonly");
+			parameterElts[i].style.color = "black";
+		}
+	}
+}
 
 function startButtonClick() {
 	if(!running && !hasStarted) {
+		readonly(true);
 		reset();
 		generateParticles();
 		running = true;
@@ -295,6 +308,7 @@ function pauseButtonClick() {
 }
 function resetButtonClick() {
 	if(!running) {
+		readonly(false);
 		hasStarted = false;
 		reset();
 	}
