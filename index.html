@@ -131,7 +131,7 @@
 			</tr>
 			<tr>
 				<td>Maze Width</td>
-				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+				<td><textarea id="mazeWidth" class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
 						canvasWidthBoxes = Number(elt.value);
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
@@ -142,7 +142,7 @@
 			</tr>
 			<tr>
 				<td>Maze Height</td>
-				<td><textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+				<td><textarea id="mazeHeight" class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
 						canvasHeightBoxes = Number(elt.value);
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];

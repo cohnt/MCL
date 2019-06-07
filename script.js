@@ -425,6 +425,8 @@ function reset() {
 	hasStarted = false;
 	document.getElementById("mazeStarti").value = currentMazeStart[0];
 	document.getElementById("mazeStartj").value = currentMazeStart[1];
+	document.getElementById("mazeHeight").value = currentMaze.length;
+	document.getElementById("mazeWidth").value = currentMaze[0].length;
 }
 function saveFrame() {
 	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances, predictedPose);
