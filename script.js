@@ -351,6 +351,10 @@ function maze1Click() {
 	if(!running) {
 		currentMaze = maze1;
 		currentMazeStart = maze1Start;
+		canvasHeightBoxes = currentMaze.length;
+		canvasWidthBoxes = currentMaze[0].length;
+		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+		resetContext();
 		reset();
 	}
 }
@@ -358,6 +362,10 @@ function maze2Click() {
 	if(!running) {
 		currentMaze = maze2;
 		currentMazeStart = maze2Start;
+		canvasHeightBoxes = currentMaze.length;
+		canvasWidthBoxes = currentMaze[0].length;
+		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+		resetContext();
 		reset();
 	}
 }
@@ -365,6 +373,10 @@ function maze3Click() {
 	if(!running) {
 		currentMaze = maze3;
 		currentMazeStart = maze3Start;
+		canvasHeightBoxes = currentMaze.length;
+		canvasWidthBoxes = currentMaze[0].length;
+		canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
+		resetContext();
 		reset();
 	}
 }
