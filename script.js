@@ -10,7 +10,7 @@ var canvasHeightBoxes = 10; //Number of boxes vertically in the canvas
 var canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight]
 
 var robotColor = "black";
-var robotSize = 15; //Radius of the robot (in pixels)
+var robotSize = Math.min(mazeBoxWidth, mazeBoxHeight) / 4; //Radius of the robot (in pixels)
 var robotMarkerTriangleAngle = 30 * (Math.PI / 180); //The front angle of the triangular robot marker
 var lidarBeamColor = "red";
 
@@ -211,6 +211,24 @@ function setup() {
 	}
 
 	document.addEventListener("keydown", function(e) {
+		keydownHandler(e);
+	});
+	document.addEventListener("keyup", function(e) {
+		var keyId = e.which;
+		keyStates[keyId] = false;
+	})
+
+	ctx = canvas.getContext("2d");
+	ctx.transform(1, 0, 0, -1, 0, 0); // Flip the context so y+ is up
+	ctx.transform(1, 0, 0, 1, 0, -canvasSize[1]); //Move 0,0 to the bottom left of the screen
+
+	reset();
+}
+function keydownHandler(e) {
+	e = e || window.event;
+	var target = e.target || e.srcElement;
+	if ( !/INPUT|TEXTAREA|SELECT|BUTTON/.test(target.nodeName) ) {
+		// Ignore 
 		var keyId = e.which;
 		keyStates[keyId] = true;
 		console.log("Key down: " + keyId);
@@ -252,11 +270,11 @@ function setup() {
 					startButtonClick();
 				}
 		}
-	});
-	document.addEventListener("keyup", function(e) {
-		var keyId = e.which;
-		keyStates[keyId] = false;
-	})
+	}
+}
+function resetContext() {
+	canvas.setAttribute("width", String(canvasSize[0]) + "px");
+	canvas.setAttribute("height", String(canvasSize[1]) + "px");
 
 	ctx = canvas.getContext("2d");
 	ctx.transform(1, 0, 0, -1, 0, 0); // Flip the context so y+ is up
@@ -264,9 +282,22 @@ function setup() {
 
 	reset();
 }
+function readonly(doMakeReadonly) {
+	for(var i=0; i<parameterElts.length; ++i) {
+		if(doMakeReadonly) {
+			parameterElts[i].readOnly = "true";
+			parameterElts[i].style.color = "grey";
+		}
+		else {
+			parameterElts[i].removeAttribute("readonly");
+			parameterElts[i].style.color = "black";
+		}
+	}
+}
 
 function startButtonClick() {
 	if(!running && !hasStarted) {
+		readonly(true);
 		reset();
 		generateParticles();
 		running = true;
@@ -285,6 +316,7 @@ function pauseButtonClick() {
 }
 function resetButtonClick() {
 	if(!running) {
+		readonly(false);
 		hasStarted = false;
 		reset();
 	}
@@ -357,7 +389,10 @@ function reset() {
 	clearCanvas();
 	drawMaze(currentMaze);
 	drawRobot(robotPos, robotOrien);
+	frames = [];
 	hasStarted = false;
+	document.getElementById("mazeStarti").value = currentMazeStart[0];
+	document.getElementById("mazeStartj").value = currentMazeStart[1];
 }
 function saveFrame() {
 	var frame = new Frame(frames.length, particles, robotPos, robotOrien, lidarDistances, predictedPose);
