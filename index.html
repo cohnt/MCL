@@ -111,7 +111,7 @@
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
 						resetContext();
 					}
-				})(this)"></textarea></td>
+				})(this)">60</textarea></td>
 				<td>The width (in pixels) of each cell in the maze.</td>
 			</tr>
 			<tr>
@@ -123,7 +123,7 @@
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
 						resetContext();
 					}
-				})(this)"></textarea></td>
+				})(this)">60</textarea></td>
 				<td>The height (in pixels) of each cell in the maze.</td>
 			</tr>
 			<tr>
@@ -134,7 +134,7 @@
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
 						resetContext();
 					}
-				})(this)"></textarea></td>
+				})(this)">15</textarea></td>
 				<td>The width of the maze, in number of cells.</td>
 			</tr>
 			<tr>
@@ -145,7 +145,7 @@
 						canvasSize = [canvasWidthBoxes*mazeBoxWidth, canvasHeightBoxes*mazeBoxHeight];
 						resetContext();
 					}
-				})(this)"></textarea></td>
+				})(this)">10</textarea></td>
 				<td>The height of the maze, in number of cells.</td>
 			</tr>
 			<tr>
@@ -154,7 +154,7 @@
 					if(Number(elt.value) >= 0 && Number(elt.value) <= 1.0) {
 						randomMazeDensity = Number(elt.value);
 					}
-				})(this)"></textarea></td>
+				})(this)">0.3333</textarea></td>
 				<td>The probability of each cell being a wall when generating a random maze. Should be in the range [0,1].</td>
 			</tr>
 			<tr>
@@ -164,12 +164,12 @@
 						currentMazeStart[0] = Number(elt.value);
 						reset();
 					}
-				})(this)"></textarea>&nbsp;<textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
+				})(this)">0</textarea>&nbsp;<textarea class="parameterForm" cols="5" rows="1" onkeyup="(function(elt){
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) >= 0 && Number(elt.value) < canvasWidthBoxes) {
 						currentMazeStart[1] = Number(elt.value);
 						reset();
 					}
-				})(this)"></textarea></td>
+				})(this)">0</textarea></td>
 				<td>The starting cell of the robot. The first entry is the row, and the second entry is the column.</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
@@ -181,7 +181,7 @@
 						tickRate = Number(elt.value);
 						tickTime = 1000 / tickRate;
 					}
-				})(this)"></textarea></td>
+				})(this)">25</textarea></td>
 				<td>The number of ticks per second.</td>
 			</tr>
 			<tr>
@@ -190,7 +190,7 @@
 					if(!isNaN(elt.value)) {
 						lidarNoiseVariance = Number(elt.value);
 					}
-				})(this)"></textarea></td>
+				})(this)">5</textarea></td>
 				<td>Variance of the noise added to LIDAR measurements.</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
@@ -201,7 +201,7 @@
 					if(Number(elt.value) > 0) {
 						robotSpeed = Number(elt.value);
 					}
-				})(this)"></textarea></td>
+				})(this)">60</textarea></td>
 				<td>Speed of the robot, in pixels per second.</td>
 			</tr>
 			<tr>
@@ -210,7 +210,7 @@
 					if(Number(elt.value) > 0) {
 						robotTurnRate = Number(elt.value) * (Math.PI / 180);
 					}
-				})(this)"></textarea></td>
+				})(this)">90</textarea></td>
 				<td>Turn rate of the robot, in degrees per second.</td>
 			</tr>
 			<tr>
@@ -220,7 +220,7 @@
 						lidarNumPoints = Number(elt.value);
 						lidarAngle = lidarFOV / (lidarNumPoints - 1);
 					}
-				})(this)"></textarea></td>
+				})(this)">25</textarea></td>
 				<td>Number of points the LIDAR measures.</td>
 			</tr>
 			<tr>
@@ -230,7 +230,7 @@
 						lidarFOV = Number(elt.value) * (Math.PI / 180);
 						lidarAngle = lidarFOV / (lidarNumPoints - 1);
 					}
-				})(this)"></textarea></td>
+				})(this)">180</textarea></td>
 				<td>The field of view of the LIDAR, in degrees.</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
@@ -241,7 +241,7 @@
 					if(Number.isInteger(Number(elt.value)) && Number(elt.value) > 0) {
 						numParticles = Number(elt.value);
 					}
-				})(this)"></textarea></td>
+				})(this)">500</textarea></td>
 				<td>How many particles to use in the particle filter.</td>
 			</tr>
 			<tr>
@@ -250,7 +250,7 @@
 					if(Number(elt.value) >= 0) {
 						particlePosNoiseVariance = Number(elt.value);
 					}
-				})(this)"></textarea></td>
+				})(this)">5</textarea></td>
 				<td>Variance of the noise added to the position of particles during resampling.</td>
 			</tr>
 			<tr>
@@ -259,7 +259,7 @@
 					if(Number(elt.value) >= 0) {
 						particleOrientationNoiseVariance = Number(elt.value) * (Math.PI / 180);
 					}
-				})(this)"></textarea></td>
+				})(this)">15</textarea></td>
 				<td>Variance of the noise added to the orientation of particles during resampling.</td>
 			</tr>
 			<tr>
@@ -268,7 +268,7 @@
 					if(Number(elt.value) >= 0 && Number(elt.value) <= 1.0) {
 						explorationFactor = Number(elt.value);
 					}
-				})(this)"></textarea></td>
+				})(this)">0.05</textarea></td>
 				<td>Fraction of particles randomly sampled each iteration. Should be in the range [0,1].</td>
 			</tr>
 			<!-- <tr>
